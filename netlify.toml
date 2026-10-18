@@ -8,3 +8,8 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+  [build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+  [context.production]
+  environment = { NETLIFY_DISABLE_DRAWER = "true" }
