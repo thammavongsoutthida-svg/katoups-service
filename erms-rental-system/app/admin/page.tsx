@@ -2,6 +2,32 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts'
+const monthlyRevenueData = [
+  { month: 'ມ.ກ', revenue: 4500000, deposit: 1350000 },
+  { month: 'ກ.ພ', revenue: 6200000, deposit: 1860000 },
+  { month: 'ມີ.ນາ', revenue: 8100000, deposit: 2430000 },
+  { month: 'ເມ.ສາ', revenue: 12500000, deposit: 3750000 },
+  { month: 'ພ.ພ', revenue: 9400000, deposit: 2820000 },
+  { month: 'ມິ.ຖ', revenue: 11000000, deposit: 3300000 },
+]
+
+const orderStatusData = [
+  { name: 'ສຳເລັດແລ້ວ', value: 1, color: '#10B981' },
+  { name: 'ກຳລັງດຳເນີນການ', value: 0, color: '#F59E0B' },
+  { name: 'ຍົກເລີກ', value: 0, color: '#EF4444' },
+]
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -907,6 +933,87 @@ export default function AdminDashboardPage() {
               <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
                 <div className="text-2xl mb-2">👥</div>
                 <p className="text-xs font-bold text-gray-400">ພະນັກງານ</p>
+                {/* --- ເພີ່ມສ່ວນກຣາຟ responsive ໃໝ່ --- */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            
+            {/* 1. ກຣາຟລາຍຮັບປະຈຳເດືອນ (Area Chart) */}
+            <div className="lg:col-span-2 bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-[#E8D0C8]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                  <h3 className="text-base md:text-lg font-bold text-[#A36B5E]">
+                    📈 ແນວໂນ້ມລາຍຮັບປະຈຳເດືອນ
+                  </h3>
+                  <p className="text-xs text-gray-400">ສະແດງຜົນລາຍຮັບລວມ ແລະ ຍອດມັດຈຳ (LAK)</p>
+                </div>
+                <span className="self-start sm:self-auto text-xs bg-[#FDF8F6] text-[#A36B5E] font-bold px-3 py-1 rounded-full border border-[#E8D0C8]">
+                  ປີ 2026
+                </span>
+              </div>
+
+              <div className="h-[260px] sm:h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={monthlyRevenueData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#A36B5E" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="#A36B5E" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="colorDeposit" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#1C6936" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#1C6936" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                    <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} />
+                    <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={(v) => `${(v / 1000000).toFixed(1)}M`} />
+                    <Tooltip
+                      formatter={(value: any) => [`${Number(value).toLocaleString()} LAK`, '']}
+                      contentStyle={{ backgroundColor: '#FFF', borderRadius: '16px', borderColor: '#E8D0C8', fontSize: '12px' }}
+                    />
+                    <Area type="monotone" dataKey="revenue" name="ລາຍຮັບລວມ" stroke="#A36B5E" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                    <Area type="monotone" dataKey="deposit" name="ຍອດມັດຈຳ (30%)" stroke="#1C6936" strokeWidth={2} fillOpacity={1} fill="url(#colorDeposit)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* 2. ກຣາຟສະຖິຕິສະຖານະອໍເດີ (Donut Chart) */}
+            <div className="bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-[#E8D0C8] flex flex-col justify-between">
+              <div>
+                <h3 className="text-base md:text-lg font-bold text-[#A36B5E] mb-1">📊 ສະຖິຕິອໍເດີ</h3>
+                <p className="text-xs text-gray-400 mb-4">ສັດສ່ວນສະຖານະອໍເດີທັງໝົດ</p>
+
+                <div className="h-[200px] w-full relative flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={orderStatusData} innerRadius={55} outerRadius={80} paddingAngle={5} dataKey="value">
+                        {orderStatusData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value: any) => [`${value} ອໍເດີ`, '']} contentStyle={{ backgroundColor: '#FFF', borderRadius: '8px', fontSize: '12px' }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-2xl font-black text-[#A36B5E]">{orders.length}</span>
+                    <span className="text-[10px] text-gray-400">ອໍເດີທັງໝົດ</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-gray-100 mt-2">
+                {orderStatusData.map((item, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                      <span className="text-gray-500">{item.name}</span>
+                    </div>
+                    <span className="font-bold text-gray-700">{item.value} ອໍເດີ</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
                 <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{staffList.length} 👤</h2>
               </div>
             </div>

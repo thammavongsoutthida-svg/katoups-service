@@ -1,36 +1,46 @@
-import type { Metadata } from 'next';
-import './globals.css';
+'use client'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react' // ຫຼື ໃຊ້ Icon ຕາມ Project
 
-export const metadata: Metadata = {
-  title: 'ກະຕູບສ໌ ບໍລິການ (Katoups Service) - ເຊົ່າເຕັ້ນ Marquee & ອຸປະກອນງານລ້ຽງ ທ່າແຂກ ຄຳມ່ວນ',
-  description: 'ບໍລິການເຊົ່າເຕັ້ນ Marquee ຫຼູຫຼາ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ແລະ ອຸປະກອນງານລ້ຽງຄົບວົງຈອນ ໃນແຂວງຄຳມ່ວນ.',
-  keywords: ['ກະຕູບສ໌', 'Katoups', 'ເຊົ່າເຕັ້ນທ່າແຂກ', 'ເຊົ່າອຸປະກອນງານລ້ຽງ', 'Marquee Tent Laos', 'ເຊົ່າໂຕະຕັ່ງຄຳມ່ວນ'],
-  openGraph: {
-    title: 'ກະຕູບສ໌ ບໍລິການ (Katoups Service) - ເຊົ່າເຕັ້ນ Marquee & ອຸປະກອນງານລ້ຽງ',
-    description: 'ບໍລິການເຊົ່າໂຕະ ຕັ່ງ ເຕັ້ນ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ຄົບວົງຈອນ.',
-    url: 'https://katoups-service.com',
-    siteName: 'Katoups Service',
-    images: [
-      {
-        url: '/logo.png',
-        width: 1200,
-        height: 630,
-        alt: 'Katoups Service Logo',
-      },
-    ],
-    locale: 'lo_LA',
-    type: 'website',
-  },
-};
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
   return (
-    <html lang="lo">
-      <body>{children}</body>
-    </html>
-  );
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
+      
+      {/* 1. Header Navbar ສຳລັບ Mobile */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200">
+        <div className="font-bold text-lg text-[#8B4513]">KATOUPS ADMIN</div>
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 rounded-md hover:bg-gray-100"
+        >
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* 2. Sidebar Component */}
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out
+        md:relative md:translate-x-0
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        {/* ເນື້ອຫາ Sidebar / ເມນູ ເກົ່າຂອງທ່ານ */}
+      </aside>
+
+      {/* Overlay ສຳລັບປິດເມນູຕອນຄລິກດ້ານນອກ (Mobile Only) */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* 3. Main Content (ໃຫ້ຂະຫຍາຍເຕັມ flex-1) */}
+      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+        {children}
+      </main>
+
+    </div>
+  )
 }
