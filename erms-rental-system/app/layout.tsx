@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ກະຕູບສ໌ ບໍລິການ (Katoups Service) - ເຊົ່າເຕັ້ນ Marquee & ອຸປະກອນງານລ້ຽງ',
     description: 'ບໍລິການເຊົ່າໂຕະ ຕັ່ງ ເຕັ້ນ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ຄົບວົງຈອນ.',
-    url: 'https://katoupsservice.com',
+    url: 'https://katoups-service.com',
     siteName: 'Katoups Service',
     images: [
       {
