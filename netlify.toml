@@ -5,11 +5,7 @@
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "ADMIN_PASSWORD,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
+  NETLIFY_DRAWER_ENABLED = "false"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-  [build.environment]
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
-  [context.production]
-  environment = { NETLIFY_DISABLE_DRAWER = "true" }
