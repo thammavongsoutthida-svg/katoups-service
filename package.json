@@ -3,6 +3,7 @@
     "prisma": "^8.0.0-rc.22"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "recharts": "^3.10.1"
   }
 }
