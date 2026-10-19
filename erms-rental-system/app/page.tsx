@@ -251,7 +251,8 @@ export default function ClientHomePage() {
     setIsSubmitting(true);
     const orderNo = `QUO-${Math.floor(10000 + Math.random() * 90000)}`;
 
-    const newOrder = {
+   const newOrder = {
+      id: Date.now().toString(), // 👈 ວາງໃສ່ຢູ່ບັນທັດນີ້ (ທາງເທິງ order_no)
       order_no: orderNo,
       customer_name: customerName,
       phone: phone,
