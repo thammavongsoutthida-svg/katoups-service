@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
@@ -13,7 +13,32 @@ export default function ClientHomePage() {
   const [location, setLocation] = useState('ທ່າແຂກ, ຄຳມ່ວນ');
   const [showInvoiceModal, setShowInvoiceModal] = useState<any>(null);
 
-  // 🎪 1. ເມນູລາຍການອຸປະກອນເຊົ່າ (ໃສ່ຮູບແທນຊົ່ວຄາວໄວ້ /11.jpeg, ສາມາດປ່ຽນ Path ຮູບໃນ public ຕາມຫຼັງໄດ້)
+  // 📅 State ສຳລັບເກັບວັນທີໆຄິວເຕັມແລ້ວ
+  const [bookedDates, setBookedDates] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 🔄 1. ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase
+  useEffect(() => {
+    const fetchBookedDates = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('event_date')
+          .neq('status', 'CANCELLED');
+
+        if (data) {
+          const dates = data.map((item: any) => item.event_date).filter(Boolean);
+          setBookedDates(dates);
+        }
+      } catch (err) {
+        console.error('Error fetching booked dates:', err);
+      }
+    };
+
+    fetchBookedDates();
+  }, []);
+
+  // 🎪 2. ເມນູລາຍການອຸປະກອນເຊົ່າ
   const stockItems = [
     { id: 'eq-1', name: 'ເຕັ້ນ Marquee VIP 10x12', price: 8000000, img: '/tt.png' },
     { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/tt.png' },
@@ -29,7 +54,7 @@ export default function ClientHomePage() {
     { id: 'eq-12', name: 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ', price: 1000000, img: '/tt.png' },
   ];
 
-  // 📸 2. ຮູບພາບຜົນງານທາງຮ້ານ (ເອົາໄວ້ໂຊໂດຍສະເພາະ ຂະຫຍາຍຮູບໃຫຍ່ສວຍງາມ)
+  // 📸 3. ຮູບພາບຜົນງານທາງຮ້ານ
   const galleryImages = [
     { id: 'g-1', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden ງານປະຊຸມ', img: '/11.jpeg' },
     { id: 'g-2', title: 'ເຕັ້ນປະດັບ Decorative Marquee VIP', img: '/12.jpeg' },
@@ -77,17 +102,60 @@ export default function ClientHomePage() {
   const deposit30 = totalAmount * 0.3;
   const balance70 = totalAmount - deposit30;
 
+  // 📱 ຟັງຊັນຈຳກັດເບີໂທບໍ່ໃຫ້ກາຍ 11 ຕົວ (02051702676)
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, ''); // ຮັບແຕ່ເລກ
+    if (val.length <= 11) {
+      setPhone(val);
+    }
+  };
+
+  // 📅 ຟັງຊັນກວດວັນທີໆເລືອກ ວ່າຄິວເຕັມແລ້ວບໍ
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.value;
+    if (bookedDates.includes(selected)) {
+      alert(`⚠️ ວັນທີ ${selected} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.`);
+      setStartDate('');
+      return;
+    }
+    setStartDate(selected);
+    if (endDate && selected > endDate) {
+      setEndDate(selected);
+    }
+  };
+
+  // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database 100%
   const handleCreateQuotation = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!customerName || !phone) return alert('ກະລຸນາປ້ອນຊື່ ແລະ ເບີໂທ WhatsApp');
-    if (cartTotalItems === 0) return alert('ກະລຸນາເລືອກອຸປະກອນຢ່າງນ້ອຍ 1 ລາຍການ');
 
+    if (!customerName.trim()) {
+      return alert('ກະລຸນາປ້ອນຊື່ລູກຄ້າ / ບໍລິສັດ');
+    }
+
+    if (!phone || phone.length < 10) {
+      return alert('ກະລຸນາປ້ອນເບີໂທໃຫ້ຖືກຕ້ອງ (ຕົວຢ່າງ: 02051702676)');
+    }
+
+    if (!startDate) {
+      return alert('ກະລຸນາເລືອກວັນທີເລີ່ມເຊົ່າ');
+    }
+
+    if (bookedDates.includes(startDate)) {
+      return alert(`⚠️ ວັນທີ ${startDate} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.`);
+    }
+
+    if (cartTotalItems === 0) {
+      return alert('ກະລຸນາເລືອກອຸປະກອນຢ່າງນ້ອຍ 1 ລາຍການ');
+    }
+
+    setIsSubmitting(true);
     const orderNo = `QUO-${Math.floor(10000 + Math.random() * 90000)}`;
+
     const newOrder = {
       order_no: orderNo,
       customer_name: customerName,
       phone: phone,
-      event_date: startDate || new Date().toISOString().split('T')[0],
+      event_date: startDate,
       total_amount: totalAmount,
       deposit: deposit30,
       balance: balance70,
@@ -95,20 +163,39 @@ export default function ClientHomePage() {
     };
 
     try {
-      await supabase.from('orders').insert([newOrder]);
-    } catch (err) {
-      console.error(err);
-    }
+      // 🚀 ສົ່ງຂໍ້ມູນລົງ Supabase Orders Table
+      const { data, error } = await supabase
+        .from('orders')
+        .insert([newOrder])
+        .select();
 
-    setShowInvoiceModal({
-      orderNo,
-      customerName,
-      phone,
-      eventDate: startDate || 'ບໍ່ໄດ້ລະບຸ',
-      totalAmount,
-      deposit30,
-      balance70,
-    });
+      if (error) {
+        console.error('Supabase Insert Error:', error);
+        alert(`❌ ບໍ່ສາມາດບັນທຶກຂໍ້ມູນລົງ Database ໄດ້: ${error.message}`);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // ✅ ບັນທຶກສຳເລັດ -> ສະແດງ Modal
+      setShowInvoiceModal({
+        orderNo,
+        customerName,
+        phone,
+        eventDate: startDate,
+        totalAmount,
+        deposit30,
+        balance70,
+      });
+
+      // ອັບເດັດຄິວເຕັມໃນ ໜ້າຈໍທັນທີ
+      setBookedDates((prev) => [...prev, startDate]);
+
+    } catch (err: any) {
+      console.error('Unexpected Error:', err);
+      alert('❌ ເກີດຂໍ້ຜິດພາດໃນການເຊື່ອມຕໍ່ລະບົບ');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -116,15 +203,14 @@ export default function ClientHomePage() {
       {/* 👑 HEADER NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
- {/* ໂລໂກ້ເທິງ Header - ລົບບໍເດີ້ຊ້ອນອອກ ໃຫ້ສະແດງຮູບເຕັມພໍດີ */}
-<div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
-  <Image 
-    src="/logo.png" 
-    alt="Katoups Logo" 
-    fill 
-    className="object-contain" 
-  />
-</div>
+          <div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
+            <Image 
+              src="/logo.png" 
+              alt="Katoups Logo" 
+              fill 
+              className="object-contain" 
+            />
+          </div>
           <div>
             <h1 className="font-extrabold text-[#C6936A] text-base leading-none">ກະຕູບສ໌ ບໍລິການ</h1>
             <p className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5">KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ</p>
@@ -158,15 +244,14 @@ export default function ClientHomePage() {
       {/* 🎪 HERO SECTION */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
         <div className="text-center space-y-3">
- {/* ໂລໂກ້ກາງໜ້າ - ລົບບໍເດີ້ຊ້ອນອອກ ໃຫ້ຮູບໂລໂກ້ຕົ້ນສະບັບສະແດງຜົນພໍດີ 100% */}
-<div className="w-32 h-32 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
-  <Image 
-    src="/logo.png" 
-    alt="Katoups Logo Large" 
-    fill 
-    className="object-contain" 
-  />
-</div>
+          <div className="w-32 h-32 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
+            <Image 
+              src="/logo.png" 
+              alt="Katoups Logo Large" 
+              fill 
+              className="object-contain" 
+            />
+          </div>
           <div className="inline-block">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
               KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)
@@ -180,7 +265,7 @@ export default function ClientHomePage() {
           </p>
         </div>
 
-        {/* 📸 1. SECTION ພາບຜົນງານທາງຮ້ານ (ເອົາໄວ້ໂຊໂດຍສະເພາະ) */}
+        {/* 📸 1. SECTION ພາບຜົນງານທາງຮ້ານ */}
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b border-[#E8D0C8] pb-2">
             <div>
@@ -216,7 +301,6 @@ export default function ClientHomePage() {
 
         {/* 🛍️ 2. SECTION ເມນູເລືອກເຊົ່າອຸປະກອນ & ຟອມອອກໃບສະເໜີລາຄາ */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ລາຍການອຸປະກອນໃຫ້ເລືອກ */}
           <div className="lg:col-span-2 space-y-4">
             <div className="border-b border-[#E8D0C8] pb-2">
               <h3 className="text-lg font-black text-[#8C5345]">🎪 ເລືອກອຸປະກອນເຊົ່າ</h3>
@@ -229,7 +313,6 @@ export default function ClientHomePage() {
                 return (
                   <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
                     <div className="space-y-3">
-                      {/* ຮູບປະກອບເມນູ (ໃສ່ຮູບແທນຊົ່ວຄາວໄວ້ /11.jpeg, ສາມາດປ່ຽນ Path ຮູບໃນ public ຕາມຫຼັງໄດ້) */}
                       <div className="h-32 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
                         <Image 
                           src={item.img} 
@@ -307,24 +390,27 @@ export default function ClientHomePage() {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ເບີໂທຕິດຕໍ່ (WhatsApp) *</label>
+                <label className="text-[11px] font-bold text-gray-600 block mb-1">ເບີໂທຕິດຕໍ່ (WhatsApp) * (ສູງສຸດ 11 ຕົວ)</label>
                 <input
                   type="text"
                   required
-                  placeholder="020 xxxx xxxx"
+                  maxLength={11}
+                  placeholder="02051702676"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]"
+                  onChange={handlePhoneChange}
+                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345] font-mono"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">ວັນທີເລີ່ມເຊົ່າ</label>
+                  <label className="text-[10px] font-bold text-gray-600 block mb-1">ວັນທີເລີ່ມເຊົ່າ *</label>
                   <input
                     type="date"
+                    required
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                    onChange={handleStartDateChange}
                     className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
                   />
                 </div>
@@ -333,6 +419,7 @@ export default function ClientHomePage() {
                   <input
                     type="date"
                     value={endDate}
+                    min={startDate || new Date().toISOString().split('T')[0]}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
                   />
@@ -351,9 +438,10 @@ export default function ClientHomePage() {
 
               <button
                 type="submit"
-                className="w-full bg-[#8C5345] text-white font-bold py-3 rounded-2xl text-xs hover:opacity-90 transition shadow-md mt-2 flex items-center justify-center gap-1.5"
+                disabled={isSubmitting}
+                className="w-full bg-[#8C5345] text-white font-bold py-3 rounded-2xl text-xs hover:opacity-90 transition shadow-md mt-2 flex items-center justify-center gap-1.5 disabled:bg-gray-400"
               >
-                <span>✨ ຢືນຢັນການຈອງ / ອອກໃບສະເໜີລາຄາ</span>
+                <span>{isSubmitting ? '⏳ ກຳລັງບັນທຶກ...' : '✨ ຢືນຢັນການຈອງ / ອອກໃບສະເໜີລາຄາ'}</span>
               </button>
             </form>
           </div>
@@ -391,7 +479,7 @@ export default function ClientHomePage() {
             </div>
 
             <a
-              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Katoups Service Order: ${showInvoiceModal.orderNo}\nລູກຄ້າ: ${showInvoiceModal.customerName}\nເບີໂທ: ${showInvoiceModal.phone}\nຍອດລວມ: ${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
+              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Katoups Service Order: ${showInvoiceModal.orderNo}\nລູກຄ້າ: ${showInvoiceModal.customerName}\nເບີໂທ: ${showInvoiceModal.phone}\nວັນທີ: ${showInvoiceModal.eventDate}\nຍອດລວມ: ${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
               target="_blank"
               rel="noreferrer"
               className="w-full block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl shadow hover:opacity-90 transition text-xs"
