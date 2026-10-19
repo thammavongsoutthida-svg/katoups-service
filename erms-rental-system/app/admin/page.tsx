@@ -25,7 +25,7 @@ const monthlyRevenueData = [
 ];
 
 const orderStatusData = [
-  { name: 'ສຳເລັດແລ້ວ', value: 1, color: '#10B981' },
+  { name: 'ສຳເລັດແລ້ວ', value: 0, color: '#10B981' },
   { name: 'ກຳລັງດຳເນີນການ', value: 0, color: '#F59E0B' },
   { name: 'ຍົກເລີກ', value: 0, color: '#EF4444' },
 ];
