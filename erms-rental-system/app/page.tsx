@@ -31,7 +31,7 @@ export default function ClientHomePage() {
 
   // 📸 2. ຮູບພາບຜົນງານທາງຮ້ານ (ເອົາໄວ້ໂຊໂດຍສະເພາະ ຂະຫຍາຍຮູບໃຫຍ່ສວຍງາມ)
   const galleryImages = [
-    { id: 'g-1', title: 'ເຕັ້ນ Marquee VIP 10x12 ງານດອງ', img: '/11.jpeg' },
+    { id: 'g-1', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden ງານປະຊຸມ', img: '/11.jpeg' },
     { id: 'g-2', title: 'ເຕັ້ນປະດັບ Decorative Marquee VIP', img: '/12.jpeg' },
     { id: 'g-3', title: 'ບັນຍາກາດການຈັດງານດອງ', img: '/13.jpeg' },
     { id: 'g-4', title: 'ເຕັ້ນໂຄງສ້າງ Marquee White VIP', img: '/44.jpeg' },
