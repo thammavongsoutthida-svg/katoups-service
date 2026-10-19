@@ -15,18 +15,18 @@ export default function ClientHomePage() {
 
   // 🎪 1. ເມນູລາຍການອຸປະກອນເຊົ່າ (ໃສ່ຮູບແທນຊົ່ວຄາວໄວ້ /11.jpeg, ສາມາດປ່ຽນ Path ຮູບໃນ public ຕາມຫຼັງໄດ້)
   const stockItems = [
-    { id: 'eq-1', name: 'ເຕັ້ນ Marquee VIP 10x12', price: 8000000, img: '/11.jpeg' },
-    { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/11.jpeg' },
-    { id: 'eq-3', name: 'ເຕັ້ນ Marquee 5x8', price: 1000000, img: '/11.jpeg' },
-    { id: 'eq-4', name: 'ເຕັ້ນ Marquee 4x6', price: 500000, img: '/11.jpeg' },
-    { id: 'eq-5', name: 'ເຕັ້ນ Marquee 4x4', price: 400000, img: '/11.jpeg' },
-    { id: 'eq-6', name: 'ເຕັ້ນປະດັບ Decorative Marquee 10x12', price: 4000000, img: '/11.jpeg' },
-    { id: 'eq-7', name: 'ເຕັ້ນປະດັບ Decorative Marquee 6x8', price: 1000000, img: '/11.jpeg' },
-    { id: 'eq-8', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)', price: 150000, img: '/11.jpeg' },
-    { id: 'eq-9', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)', price: 250000, img: '/11.jpeg' },
-    { id: 'eq-10', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (1) (8 ທ່ານ)', price: 60000, img: '/11.jpeg' },
-    { id: 'eq-11', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (2)', price: 25000, img: '/11.jpeg' },
-    { id: 'eq-12', name: 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ', price: 1000000, img: '/11.jpeg' },
+    { id: 'eq-1', name: 'ເຕັ້ນ Marquee VIP 10x12', price: 8000000, img: '/tt.png' },
+    { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/tt.png' },
+    { id: 'eq-3', name: 'ເຕັ້ນ Marquee 5x8', price: 1000000, img: '/tt.png' },
+    { id: 'eq-4', name: 'ເຕັ້ນ Marquee 4x6', price: 500000, img: '/tt.png' },
+    { id: 'eq-5', name: 'ເຕັ້ນ Marquee 4x4', price: 400000, img: '/tt.png' },
+    { id: 'eq-6', name: 'ເຕັ້ນປະດັບ Decorative Marquee 10x12', price: 4000000, img: '/tt.png' },
+    { id: 'eq-7', name: 'ເຕັ້ນປະດັບ Decorative Marquee 6x8', price: 1000000, img: '/tt.png' },
+    { id: 'eq-8', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)', price: 150000, img: '/tt.png' },
+    { id: 'eq-9', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)', price: 250000, img: '/tt.png' },
+    { id: 'eq-10', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (8 ທ່ານ)', price: 60000, img: '/tt.png' },
+    { id: 'eq-11', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (8 ທ່ານ)', price: 25000, img: '/tt.png' },
+    { id: 'eq-12', name: 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ', price: 1000000, img: '/tt.png' },
   ];
 
   // 📸 2. ຮູບພາບຜົນງານທາງຮ້ານ (ເອົາໄວ້ໂຊໂດຍສະເພາະ ຂະຫຍາຍຮູບໃຫຍ່ສວຍງາມ)
