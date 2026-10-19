@@ -1,488 +1,241 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
-export default function ClientHomePage() {
-  const [lang, setLang] = useState<'la' | 'en'>('la');
-  const [cart, setCart] = useState<{ [key: string]: number }>({});
-  const [customerName, setCustomerName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [location, setLocation] = useState('ທ່າແຂກ, ຄຳມ່ວນ');
-  const [showInvoiceModal, setShowInvoiceModal] = useState<any>(null);
-  
-  // 📅 State ສຳລັບເກັບວັນທີໆມີການຈອງແລ້ວ (ຄິວເຕັມ)
-  const [bookedDates, setBookedDates] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function AdminDashboardPage() {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<'orders' | 'stock' | 'dashboard'>('dashboard');
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  // 1️⃣ ດຶງຂໍ້ມູນວັນທີໆຖືກຈອງແລ້ວຈາກ Supabase
-  useEffect(() => {
-    const fetchBookedDates = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('orders')
-          .select('event_date')
-          .neq('status', 'CANCELLED'); // ບໍ່ນັບອໍເດີ້ທີ່ຍົກເລີກ
-
-        if (data) {
-          const dates = data.map((item: any) => item.event_date).filter(Boolean);
-          setBookedDates(dates);
-        }
-      } catch (err) {
-        console.error('Error fetching booked dates:', err);
-      }
-    };
-
-    fetchBookedDates();
-  }, []);
-
-  // 🎪 2. ເມນູລາຍການອຸປະກອນເຊົ່າ
-  const stockItems = [
-    { id: 'eq-1', name: 'ເຕັ້ນ Marquee VIP 10x12', price: 8000000, img: '/tt.png' },
-    { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/tt.png' },
-    { id: 'eq-3', name: 'ເຕັ້ນ Marquee 5x8', price: 1000000, img: '/tt.png' },
-    { id: 'eq-4', name: 'ເຕັ້ນ Marquee 4x6', price: 500000, img: '/tt.png' },
-    { id: 'eq-5', name: 'ເຕັ້ນ Marquee 4x4', price: 400000, img: '/tt.png' },
-    { id: 'eq-6', name: 'ເຕັ້ນປະດັບ Decorative Marquee 10x12', price: 4000000, img: '/tt.png' },
-    { id: 'eq-7', name: 'ເຕັ້ນປະດັບ Decorative Marquee 6x8', price: 1000000, img: '/tt.png' },
-    { id: 'eq-8', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)', price: 150000, img: '/tt.png' },
-    { id: 'eq-9', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)', price: 250000, img: '/tt.png' },
-    { id: 'eq-10', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (8 ທ່ານ)', price: 60000, img: '/tt.png' },
-    { id: 'eq-11', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (8 ທ່ານ)', price: 25000, img: '/tt.png' },
-    { id: 'eq-12', name: 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ', price: 1000000, img: '/tt.png' },
-  ];
-
-  // 📸 3. ຮູບພາບຜົນງານທາງຮ້ານ
-  const galleryImages = [
-    { id: 'g-1', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden ງານປະຊຸມ', img: '/11.jpeg' },
-    { id: 'g-2', title: 'ເຕັ້ນປະດັບ Decorative Marquee VIP', img: '/12.jpeg' },
-    { id: 'g-3', title: 'ບັນຍາກາດການຈັດງານດອງ', img: '/13.jpeg' },
-    { id: 'g-4', title: 'ເຕັ້ນໂຄງສ້າງ Marquee White VIP', img: '/44.jpeg' },
-    { id: 'g-5', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden VIP', img: '/45.jpeg' },
-    { id: 'g-6', title: 'ງານປະດັບໄຟ ແລະ ເຕັ້ນປະດັບ', img: '/56.jpeg' },
-    { id: 'g-7', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic', img: '/656.jpeg' },
-    { id: 'g-8', title: 'ດອກໄຟແຊນເດີເລຍ', img: '/656565.jpeg' },
-  ];
-
-  const scrollToQuotation = () => {
-    const element = document.getElementById('quotation-form');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const addToCart = (id: string) => {
-    setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-  };
-
-  const removeFromCart = (id: string) => {
-    setCart((prev) => {
-      const updated = { ...prev };
-      if (updated[id] > 1) {
-        updated[id] -= 1;
-      } else {
-        delete updated[id];
-      }
-      return updated;
-    });
-  };
-
-  const cartTotalItems = Object.values(cart).reduce((a, b) => a + b, 0);
-
-  const calculateTotal = () => {
-    return Object.entries(cart).reduce((sum, [id, qty]) => {
-      const item = stockItems.find((s) => s.id === id);
-      return sum + (item ? item.price * qty : 0);
-    }, 0);
-  };
-
-  const totalAmount = calculateTotal();
-  const deposit30 = totalAmount * 0.3;
-  const balance70 = totalAmount - deposit30;
-
-  // 📱 ເຊັກເບີໂທ (02051702676 = 11 ຕົວເລກ)
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, ''); // ຮັບສະເພາະຕົວເລກ
-    if (value.length <= 11) {
-      setPhone(value);
-    }
-  };
-
-  // 📅 ເຊັກວັນທີເລີ່ມເຊົ່າ
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = e.target.value;
-    if (bookedDates.includes(selectedDate)) {
-      alert(`⚠️ ວັນທີ ${selectedDate} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.`);
-      setStartDate('');
-      return;
-    }
-    setStartDate(selectedDate);
-    if (endDate && selectedDate > endDate) {
-      setEndDate(selectedDate);
-    }
-  };
-
-  // 📝 4. ຟັງຊັນບັນທຶກອໍເດີ້ລົງ Supabase Database ແນ່ນອນ 100%
-  const handleCreateQuotation = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!customerName.trim()) {
-      return alert('ກະລຸນາປ້ອນຊື່ລູກຄ້າ / ບໍລິສັດ');
-    }
-
-    if (!phone || phone.length < 10) {
-      return alert('ກະລຸນາປ້ອນເບີໂທໃຫ້ຖືກຕ້ອງ (ຕົວຢ່າງ: 02051702676)');
-    }
-
-    if (!startDate) {
-      return alert('ກະລຸນາເລືອກວັນທີເລີ່ມເຊົ່າ');
-    }
-
-    if (bookedDates.includes(startDate)) {
-      return alert(`⚠️ ວັນທີ ${startDate} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.`);
-    }
-
-    if (cartTotalItems === 0) {
-      return alert('ກະລຸນາເລືອກອຸປະກອນຢ່າງນ້ອຍ 1 ລາຍການ');
-    }
-
-    setIsSubmitting(true);
-    const orderNo = `QUO-${Math.floor(10000 + Math.random() * 90000)}`;
-
-    const newOrder = {
-      order_no: orderNo,
-      customer_name: customerName,
-      phone: phone,
-      event_date: startDate,
-      total_amount: totalAmount,
-      deposit: deposit30,
-      balance: balance70,
-      status: 'PENDING',
-    };
-
+  // ☁️ ດຶງຂໍ້ມູນອໍເດີ້ທັງໝົດຈາກ Supabase (ເຄຼຍແຄສຂໍ້ມູນໃໝ່)
+  const fetchOrders = async () => {
+    setLoading(true);
     try {
-      // 🚀 Insert ໄປ Supabase ພ້ອມກວດ Error
       const { data, error } = await supabase
         .from('orders')
-        .insert([newOrder])
-        .select();
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Supabase Insert Error:', error);
-        alert(`❌ ບໍ່ສາມາດບັນທຶກຂໍ້ມູນລົງ Database ໄດ້: ${error.message}`);
-        setIsSubmitting(false);
+      if (data) {
+        const formatted = data.map((o) => ({
+          id: o.id,
+          orderNo: o.order_no,
+          customerName: o.customer_name,
+          phone: o.phone,
+          eventDate: o.event_date,
+          totalAmount: Number(o.total_amount) || 0,
+          deposit: Number(o.deposit) || 0,
+          balance: Number(o.balance) || 0,
+          status: o.status || 'PENDING',
+          createdAt: o.created_at,
+        }));
+        setOrders(formatted);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem('katoups_admin_token');
+    if (!isAuth) {
+      router.push('/admin/login');
+      return;
+    }
+    fetchOrders();
+  }, [router]);
+
+  // 🗑️ ຟັງຊັນລົບອໍເດີ້ອອກຈາກ Database 100%
+  const deleteOrder = async (orderId: string) => {
+    if (confirm('ທ່ານຕ້ອງການລົບບິນນີ້ແທ້ບໍ? ຂໍ້ມູນຈະຖືກລົບອອກຈາກ Database ເດັດຂາດ.')) {
+      setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      await supabase.from('orders').delete().eq('id', orderId);
+      await fetchOrders(); // 🔥 ລ້າງແຄສ ເຄຼຍຍອດເງິນໃໝ່
+    }
+  };
+
+  // 🔄 ຟັງຊັນອັບເດດສະຖານະ (ຖ້າເລືອກ "ຍົກເລີກ" ໃຫ້ລົບອອກຈາກ Database ເລີຍ)
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    if (newStatus === 'CANCELLED') {
+      if (confirm('⚠️ ທ່ານເລືອກຍົກເລີກອໍເດີ! ລະບົບຈະລົບອໍເດີນີ້ອອກຈາກ Database ເພື່ອບໍ່ໃຫ້ຕົກຄ້າງ. ຢືນຢັນບໍ?')) {
+        await deleteOrder(orderId);
+        return;
+      } else {
         return;
       }
-
-      // ✅ ບັນທຶກສຳເລັດ -> ສະແດງ Modal
-      setShowInvoiceModal({
-        orderNo,
-        customerName,
-        phone,
-        eventDate: startDate,
-        totalAmount,
-        deposit30,
-        balance70,
-      });
-
-      // ອັບເດັດຄິວເຕັມທັນທີ
-      setBookedDates((prev) => [...prev, startDate]);
-
-    } catch (err: any) {
-      console.error('Unexpected Error:', err);
-      alert('❌ ເກີດຂໍ້ຜິດພາດໃນການເຊື່ອມຕໍ່ລະບົບ');
-    } finally {
-      setIsSubmitting(false);
     }
+
+    setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o)));
+    await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+    await fetchOrders();
+  };
+
+  // 💰 ຄິດໄລ່ຍອດເງິນ ແລະ ສະຖິຕິສະເພາະອໍເດີ້ທີ່ຢູ່ Database ແທ້ (ບໍ່ມີຍົກເລີກ/ຕົກຄ້າງ)
+  const totalRevenue = orders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
+  const totalDeposit = orders.reduce((sum, o) => sum + (Number(o.deposit) || 0), 0);
+
+  const completedCount = orders.filter((o) => o.status === 'COMPLETED' || o.status === 'CONFIRMED').length;
+  const pendingCount = orders.filter((o) => o.status === 'PENDING').length;
+
+  const dynamicOrderStatusData = [
+    { name: 'ສຳເລັດ/ມັດຈຳແລ້ວ', value: completedCount, color: '#10B981' },
+    { name: 'ກຳລັງດຳເນີນການ', value: pendingCount, color: '#F59E0B' },
+  ];
+
+  const handleLogout = () => {
+    localStorage.removeItem('katoups_admin_token');
+    router.push('/admin/login');
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF3F0] font-['Noto_Sans_Lao',sans-serif] text-[#3D2B27]">
-      {/* 👑 HEADER NAVBAR */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
-            <Image src="/logo.png" alt="Katoups Logo" fill className="object-contain" />
-          </div>
+    <div className="min-h-screen bg-[#FAF3F0] flex font-['Noto_Sans_Lao',sans-serif]">
+      {/* Sidebar Navigation */}
+      <aside className="w-64 bg-white border-r border-[#E8D0C8] p-6 flex flex-col justify-between shadow-sm">
+        <div className="space-y-6">
           <div>
-            <h1 className="font-extrabold text-[#C6936A] text-base leading-none">ກະຕູບສ໌ ບໍລິການ</h1>
-            <p className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5">KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={scrollToQuotation}
-            className="bg-[#8C5345] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
-          >
-            <span>🛒 ຕະກ້າ ({cartTotalItems})</span>
-          </button>
-
-          <button
-            onClick={scrollToQuotation}
-            className="bg-[#C6936A] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
-          >
-            <span>📄 ໃບສະເໜີລາຄາ</span>
-          </button>
-
-          <button
-            onClick={() => setLang(lang === 'la' ? 'en' : 'la')}
-            className="text-xs border border-[#C6936A] text-[#C6936A] font-bold px-2.5 py-1 rounded-full hover:bg-[#FAF3F0]"
-          >
-            🌐 {lang.toUpperCase()}
-          </button>
-        </div>
-      </header>
-
-      {/* 🎪 HERO SECTION */}
-      <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
-        <div className="text-center space-y-3">
-          <div className="w-32 h-32 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
-            <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-contain" />
-          </div>
-          <div className="inline-block">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
-              KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)
-            </span>
-          </div>
-          <h2 className="text-2xl md:text-4xl font-extrabold text-[#3D2B27]">
-            ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ <span className="text-[#C6936A]">ກະຕູບສ໌ ບໍລິການ</span>
-          </h2>
-          <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto">
-            ຍົກລະດັບງານລ້ຽງຂອງທ່ານດ້ວຍເຕັ້ນ Marquee ຫຍູ້ຫລາ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ແລະ ອຸປະກອນຈັດງານລ້ຽງຄົບວົງຈອນ.
-          </p>
-        </div>
-
-        {/* 📸 1. SECTION ພາບຜົນງານທາງຮ້ານ */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-[#E8D0C8] pb-2">
-            <div>
-              <h3 className="text-lg md:text-xl font-black text-[#A36B5E] flex items-center gap-2">
-                <span>✨</span> ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ກະຕູບສ໌ ບໍລິການ
-              </h3>
-              <p className="text-xs text-gray-400 font-bold">ຕົວຢ່າງງານຕິດຕັ້ງເຕັ້ນ VIP, ຊຸດໂຕະຕັ່ງ ແລະ ການປະດັບປະດາ</p>
-            </div>
-            <span className="text-xs font-bold text-[#C6936A] bg-white px-3 py-1 rounded-full border border-[#E8D0C8]">
-              {galleryImages.length} ຜົນງານ
-            </span>
+            <h1 className="font-extrabold text-[#C6936A] text-xl tracking-wider">KATOUPS</h1>
+            <p className="text-[11px] text-[#A36B5E] font-bold uppercase tracking-widest mt-0.5">ADMIN PANEL</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {galleryImages.map((g) => (
-              <div key={g.id} className="group relative bg-white rounded-3xl overflow-hidden border border-[#E8D0C8] shadow-sm hover:shadow-lg transition duration-300">
-                <div className="h-56 sm:h-64 w-full relative bg-[#FAF3F0]">
-                  <Image 
-                    src={g.img} 
-                    alt={g.title} 
-                    fill 
-                    className="object-cover group-hover:scale-105 transition duration-500" 
-                    onError={(e: any) => { e.target.srcset = '/logo.png'; }}
-                  />
-                </div>
-                <div className="p-3 text-center bg-white border-t border-[#FAF3F0]">
-                  <p className="text-xs font-bold text-[#3D2B27]">{g.title}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 🛍️ 2. SECTION ເມນູເລືອກເຊົ່າອຸປະກອນ & ຟອມອອກໃບສະເໜີລາຄາ */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-4">
-            <div className="border-b border-[#E8D0C8] pb-2">
-              <h3 className="text-lg font-black text-[#8C5345]">🎪 ເລືອກອຸປະກອນເຊົ່າ</h3>
-              <p className="text-xs text-gray-400 font-bold">ຄລິກເພີ່ມອຸປະກອນເຂົ້າໃນຕະກ້າເພື່ອຄິດໄລ່ຄ່າເຊົ່າ</p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {stockItems.map((item) => {
-                const qty = cart[item.id] || 0;
-                return (
-                  <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                    <div className="space-y-3">
-                      <div className="h-32 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
-                        <Image 
-                          src={item.img} 
-                          alt={item.name} 
-                          fill 
-                          className="object-cover"
-                          onError={(e: any) => { e.target.srcset = '/logo.png'; }}
-                        />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
-                        <p className="text-sm font-extrabold text-[#8C5345] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">/ຊຸດ/ມື້</span></p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
-                      {qty === 0 ? (
-                        <button
-                          onClick={() => addToCart(item.id)}
-                          className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition"
-                        >
-                          + ເພີ່ມເຂົ້າໃນຕະກ້າ
-                        </button>
-                      ) : (
-                        <div className="flex items-center justify-between bg-[#FAF3F0] rounded-xl p-1 border border-[#E8D0C8]">
-                          <button onClick={() => removeFromCart(item.id)} className="w-7 h-7 bg-white text-[#8C5345] font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">-</button>
-                          <span className="font-extrabold text-xs text-[#8C5345]">{qty}</span>
-                          <button onClick={() => addToCart(item.id)} className="w-7 h-7 bg-[#8C5345] text-white font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">+</button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 📝 ຟອມອອກໃບສະເໜີລາຄາ */}
-          <div id="quotation-form" className="bg-white p-6 rounded-3xl border-2 border-[#C6936A] shadow-md h-fit space-y-5 scroll-mt-24">
-            <div>
-              <h3 className="font-extrabold text-[#8C5345] text-base">📝 ຟອມອອກໃບສະເໜີລາຄາ / ຈອງອຸປະກອນ</h3>
-              <p className="text-xs text-gray-400 font-bold mt-0.5">ເລືອກອຸປະກອນແລ້ວປ້ອນຂໍ້ມູນເພື່ອອອກໃບສະເໜີລາຄາ</p>
-            </div>
-
-            <div className="space-y-2 border-y border-[#E8D0C8] py-3 text-xs">
-              <div className="flex justify-between font-bold text-gray-500">
-                <span>ຈຳນວນອຸປະກອນ:</span>
-                <span className="text-[#8C5345]">{cartTotalItems} ລາຍການ</span>
-              </div>
-              <div className="flex justify-between font-bold text-gray-500">
-                <span>ລວມຄ່າເຊົ່າທັງໝົດ:</span>
-                <span className="text-base font-black text-[#3D2B27]">{totalAmount.toLocaleString()} LAK</span>
-              </div>
-              <div className="flex justify-between font-bold text-gray-500">
-                <span>ມັດຈຳ (30%):</span>
-                <span className="text-[#8C5345]">{deposit30.toLocaleString()} LAK</span>
-              </div>
-              <div className="flex justify-between font-bold text-gray-500 pt-1 border-t border-dashed">
-                <span>ຈ່າຍມື້ຮັບເຄື່ອງ (70%):</span>
-                <span className="text-[#C6936A] font-extrabold">{balance70.toLocaleString()} LAK</span>
-              </div>
-            </div>
-
-            <form onSubmit={handleCreateQuotation} className="space-y-3">
-              <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ຊື່ລູກຄ້າ / ບໍລິສັດ *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="ປ້ອນຊື່ ແລະ ນາມສະກຸນ"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]"
-                />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ເບີໂທຕິດຕໍ່ (WhatsApp) * (ສູງສຸດ 11 ຕົວ)</label>
-                <input
-                  type="text"
-                  required
-                  maxLength={11}
-                  placeholder="02051702676"
-                  value={phone}
-                  onChange={handlePhoneChange}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345] font-mono"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">ວັນທີເລີ່ມເຊົ່າ *</label>
-                  <input
-                    type="date"
-                    required
-                    value={startDate}
-                    min={new Date().toISOString().split('T')[0]}
-                    onChange={handleStartDateChange}
-                    className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">ວັນທີສົ່ງເຄື່ອງ</label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    min={startDate || new Date().toISOString().split('T')[0]}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ສະຖານທີ່ຈັດງານ</label>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[#8C5345] text-white font-bold py-3 rounded-2xl text-xs hover:opacity-90 transition shadow-md mt-2 flex items-center justify-center gap-1.5 disabled:bg-gray-400"
-              >
-                <span>{isSubmitting ? '⏳ ກຳລັງບັນທຶກ...' : '✨ ຢືນຢັນການຈອງ / ອອກໃບສະເໜີລາຄາ'}</span>
-              </button>
-            </form>
-          </div>
-        </div>
-      </main>
-
-      {/* 📱 ປຸ່ມລອຍໃບສະເໜີລາຄາ */}
-      <button
-        onClick={scrollToQuotation}
-        className="fixed bottom-6 right-4 bg-[#8C5345] text-white px-4 py-3 rounded-full shadow-2xl font-bold text-xs flex items-center gap-2 z-50 hover:scale-105 transition active:scale-95 md:hidden border-2 border-white"
-      >
-        <span>📝 ໄປຫາໃບສະເໜີລາຄາ</span>
-        {cartTotalItems > 0 && (
-          <span className="bg-amber-400 text-black w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-black">
-            {cartTotalItems}
-          </span>
-        )}
-      </button>
-
-      {/* 📄 MODAL INVOICE */}
-      {showInvoiceModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-[#E8D0C8]">
-            <div className="text-center space-y-1">
-              <span className="text-2xl">🎉</span>
-              <h3 className="text-lg font-black text-[#8C5345]">ໃບສະເໜີລາຄາສຳເລັດ!</h3>
-              <p className="text-xs text-gray-400">ໝາຍເລກອໍເດີ: <span className="font-bold text-[#C6936A]">{showInvoiceModal.orderNo}</span></p>
-            </div>
-
-            <div className="bg-[#FAF3F0] p-4 rounded-2xl space-y-2 text-xs border border-[#E8D0C8]">
-              <div className="flex justify-between"><span>ຊື່ລູກຄ້າ:</span><b>{showInvoiceModal.customerName}</b></div>
-              <div className="flex justify-between"><span>ເບີໂທ:</span><b>{showInvoiceModal.phone}</b></div>
-              <div className="flex justify-between"><span>ວັນທີຈັດງານ:</span><b>{showInvoiceModal.eventDate}</b></div>
-              <div className="flex justify-between border-t border-[#E8D0C8] pt-2 text-[#8C5345]"><span>ມັດຈຳ (30%):</span><b>{showInvoiceModal.deposit30.toLocaleString()} LAK</b></div>
-            </div>
-
-            <a
-              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Katoups Service Order: ${showInvoiceModal.orderNo}\nລູກຄ້າ: ${showInvoiceModal.customerName}\nເບີໂທ: ${showInvoiceModal.phone}\nວັນທີ: ${showInvoiceModal.eventDate}\nຍອດລວມ: ${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl shadow hover:opacity-90 transition text-xs"
-            >
-              📲 ສົ່ງຂໍ້ມູນເຂົ້າ WhatsApp ຮ້ານ
-            </a>
-
-            <button onClick={() => setShowInvoiceModal(null)} className="w-full border border-gray-300 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-50">
-              ❌ ປິດ
+          <nav className="space-y-2">
+            <button onClick={() => setActiveTab('orders')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'orders' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+              <span>📋</span><span>ຈັດການອໍເດີ (Full CRUD)</span>
             </button>
-          </div>
+            <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'dashboard' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+              <span>📈</span><span>ແຜງຄວບຄຸມ (Dashboard)</span>
+            </button>
+          </nav>
         </div>
-      )}
+
+        <div className="space-y-3">
+          <a href="/" className="block text-center border border-[#C6936A] text-[#C6936A] text-xs font-bold py-2.5 rounded-full hover:bg-[#FAF3F0] transition">
+            🌐 ເບິ່ງໜ້າລູກຄ້າ
+          </a>
+          <button onClick={handleLogout} className="w-full text-center bg-red-50 text-red-600 text-xs font-bold py-2.5 rounded-full hover:bg-red-100 transition">
+            🚪 ອອກຈາກລະບົບ 
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-black text-[#3D2B27]">
+              {activeTab === 'orders' && '📋 ຈັດການອໍເດີ້ລູກຄ້າ'}
+              {activeTab === 'dashboard' && '📈 ພາບລວມລະບົບ (Overview)'}
+            </h1>
+            <p className="text-xs text-gray-400 font-bold mt-1">Katoups Service Realtime Database Active</p>
+          </div>
+          <button onClick={fetchOrders} className="bg-white border border-[#E8D0C8] px-4 py-2 rounded-full text-xs font-bold text-[#8C5345] shadow-sm hover:bg-[#FAF3F0]">
+            🔄 ດຶງຂໍ້ມູນໃໝ່ (Refresh Cache)
+          </button>
+        </div>
+
+        {/* 📋 ORDERS TAB */}
+        {activeTab === 'orders' && (
+          <div className="bg-white rounded-3xl border border-[#E8D0C8] shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-[#E8D0C8] flex justify-between items-center">
+              <h3 className="font-bold text-[#3D2B27]">ລາຍການອໍເດີ້ທັງໝົດ</h3>
+              <span className="text-xs text-gray-400 font-bold">ທັງໝົດ {orders.length} ອໍເດີ</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-[#FAF3F0] text-[#8C5345] font-bold text-xs uppercase border-b border-[#E8D0C8]">
+                  <tr>
+                    <th className="p-4">ເລກອໍເດີ</th>
+                    <th className="p-4">ລູກຄ້າ / ເບີໂທ</th>
+                    <th className="p-4">ວັນທີຈັດງານ</th>
+                    <th className="p-4">ຍອດລວມ</th>
+                    <th className="p-4">ມັດຈຳ (30%)</th>
+                    <th className="p-4">ສະຖານະ</th>
+                    <th className="p-4 text-center">ຈັດການ (DELETE)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E8D0C8]">
+                  {loading ? (
+                    <tr><td colSpan={7} className="text-center py-12 text-gray-400 font-medium">ກຳລັງດຶງຂໍ້ມູນ...</td></tr>
+                  ) : orders.length === 0 ? (
+                    <tr><td colSpan={7} className="text-center py-12 text-gray-400 font-medium">ຍັງບໍ່ທັນມີຂໍ້ມູນອໍເດີ້</td></tr>
+                  ) : (
+                    orders.map((o) => (
+                      <tr key={o.id} className="hover:bg-[#FAF3F0]/50 transition">
+                        <td className="p-4 font-extrabold text-[#8C5345]">{o.orderNo}</td>
+                        <td className="p-4"><div className="font-bold text-[#3D2B27]">{o.customerName}</div><div className="text-xs text-gray-400">{o.phone}</div></td>
+                        <td className="p-4 font-medium">{o.eventDate}</td>
+                        <td className="p-4 font-bold">{Number(o.totalAmount).toLocaleString()} LAK</td>
+                        <td className="p-4 font-bold text-[#8C5345]">{Number(o.deposit).toLocaleString()} LAK</td>
+                        <td className="p-4">
+                          <select value={o.status || 'PENDING'} onChange={(e) => updateOrderStatus(o.id, e.target.value)} className="bg-[#FAF3F0] border border-[#E8D0C8] text-xs font-bold rounded-xl px-2 py-1.5 focus:outline-none">
+                            <option value="PENDING">⏳ ຖໍາມັດຈໍາ</option>
+                            <option value="CONFIRMED">✅ ມັດຈໍາແລ້ວ</option>
+                            <option value="COMPLETED">🎉 ສຳເລັດງານ</option>
+                            <option value="CANCELLED">❌ ຍົກເລີກ (ລົບອອກ DB)</option>
+                          </select>
+                        </td>
+                        <td className="p-4 text-center">
+                          <button onClick={() => deleteOrder(o.id)} className="bg-red-50 text-red-600 px-3 py-1 rounded-xl text-xs font-bold hover:bg-red-100 transition">🗑️ ລົບ</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* 📈 DASHBOARD TAB */}
+        {activeTab === 'dashboard' && (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+                <div className="text-2xl mb-2">💰</div>
+                <p className="text-xs font-bold text-gray-400">ລາຍຮັບລວມ (ສຳເລັດ/ມັດຈຳ)</p>
+                <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{totalRevenue.toLocaleString()} LAK</h2>
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+                <div className="text-2xl mb-2">💵</div>
+                <p className="text-xs font-bold text-gray-400">ຍອດມັດຈຳ (30%)</p>
+                <h2 className="text-2xl font-black text-[#C6936A] mt-1">{totalDeposit.toLocaleString()} LAK</h2>
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+                <div className="text-2xl mb-2">✅</div>
+                <p className="text-xs font-bold text-gray-400">ອໍເດີ້ທີ່ຢູ່ໃນ Database</p>
+                <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{orders.length} Orders</h2>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#E8D0C8] max-w-md">
+              <h3 className="text-lg font-bold text-[#A36B5E] mb-1">📊 ສະຖິຕິອໍເດີແທ້</h3>
+              <p className="text-xs text-gray-400 mb-4">ສະແດງສະເພາະອໍເດີ້ທີ່ສົມບູນໃນ Database</p>
+
+              <div className="h-[200px] w-full relative flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={dynamicOrderStatusData} innerRadius={55} outerRadius={80} paddingAngle={5} dataKey="value">
+                      {dynamicOrderStatusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: any) => [`${value} ອໍເດີ`, '']} contentStyle={{ backgroundColor: '#FFF', borderRadius: '8px', fontSize: '12px' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
