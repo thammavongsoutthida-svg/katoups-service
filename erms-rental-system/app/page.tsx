@@ -116,15 +116,15 @@ export default function ClientHomePage() {
       {/* 👑 HEADER NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
-          {/* 🎯 ໂໂລໂກ້ເທິງ Header: scale-[1.55] ເພື່ອໃຫ້ຮູບໃຫຍ່ພໍດີເຕັມວົງມົນ */}
-          <div className="w-10 h-10 relative rounded-full overflow-hidden border border-[#C6936A] bg-white flex items-center justify-center shadow-sm">
-            <Image 
-              src="/logo.png" 
-              alt="Katoups Logo" 
-              fill 
-              className="object-cover scale-[1.55]" 
-            />
-          </div>
+ {/* ໂລໂກ້ເທິງ Header - ລົບບໍເດີ້ຊ້ອນອອກ ໃຫ້ສະແດງຮູບເຕັມພໍດີ */}
+<div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
+  <Image 
+    src="/logo.png" 
+    alt="Katoups Logo" 
+    fill 
+    className="object-contain" 
+  />
+</div>
           <div>
             <h1 className="font-extrabold text-[#C6936A] text-base leading-none">ກະຕູບສ໌ ບໍລິການ</h1>
             <p className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5">KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ</p>
@@ -158,15 +158,15 @@ export default function ClientHomePage() {
       {/* 🎪 HERO SECTION */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
         <div className="text-center space-y-3">
-          {/* 🎯 ໂໂລໂກ້ກາງໜ້າ: scale-[1.55] ໃຫຍ່ພໍດີເຕັມວົງມົນ 100% */}
-          <div className="w-28 h-28 mx-auto relative rounded-full overflow-hidden border-2 border-[#C6936A] shadow-md bg-white flex items-center justify-center">
-            <Image 
-              src="/logo.png" 
-              alt="Katoups Logo Large" 
-              fill 
-              className="object-cover scale-[1.55]" 
-            />
-          </div>
+ {/* ໂລໂກ້ກາງໜ້າ - ລົບບໍເດີ້ຊ້ອນອອກ ໃຫ້ຮູບໂລໂກ້ຕົ້ນສະບັບສະແດງຜົນພໍດີ 100% */}
+<div className="w-32 h-32 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
+  <Image 
+    src="/logo.png" 
+    alt="Katoups Logo Large" 
+    fill 
+    className="object-contain" 
+  />
+</div>
           <div className="inline-block">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
               KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)
