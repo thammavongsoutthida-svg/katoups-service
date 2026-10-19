@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
@@ -13,7 +13,7 @@ export default function ClientHomePage() {
   const [location, setLocation] = useState('ທ່າແຂກ, ຄຳມ່ວນ');
   const [showInvoiceModal, setShowInvoiceModal] = useState<any>(null);
 
-  // 🎪 ລາຍການອຸປະກອນ
+  // 🎪 ລາຍການອຸປະກອນ (ສາມາດປ່ຽນ Path ຮູບຢູ່ຊ່ອງ img ເພື່ອດຶງຮູບອື່ນຈາກ public ມາໃສ່ຕາມຫຼັງໄດ້)
   const stockItems = [
     { id: 'eq-1', name: 'ເຕັ້ນ Marquee 10x12', price: 8000000, img: '/11.jpeg' },
     { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/12.jpeg' },
@@ -29,7 +29,6 @@ export default function ClientHomePage() {
     { id: 'eq-17', name: 'ຫຍ້າທຽມ (Artificial Grass)', price: 200000, img: '/65.jpeg' },
   ];
 
-  // 🎯 ຟັງຊັນເລື່ອນລົງໄປຫາຟອມໃບສະເໜີລາຄາ
   const scrollToQuotation = () => {
     const element = document.getElementById('quotation-form');
     if (element) {
@@ -105,7 +104,8 @@ export default function ClientHomePage() {
       {/* 👑 HEADER NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 relative rounded-full overflow-hidden border border-[#C6936A]">
+          {/* ໂລໂກ້ເທິງ Header - ແປງໃຫ້ພໍດີບໍ່ມີວົງມົນຊ້ອນ */}
+          <div className="w-10 h-10 relative rounded-full overflow-hidden">
             <Image src="/logo.png" alt="Katoups Logo" fill className="object-cover" />
           </div>
           <div>
@@ -115,7 +115,6 @@ export default function ClientHomePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* 🛒 ປຸ່ມຕະກ້າ */}
           <button
             onClick={scrollToQuotation}
             className="bg-[#8C5345] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
@@ -123,7 +122,6 @@ export default function ClientHomePage() {
             <span>🛒 ຕະກ້າ ({cartTotalItems})</span>
           </button>
 
-          {/* 📄 ປຸ່ມກົດເລື່ອນລົງໄປໃບສະເໜີລາຄາ */}
           <button
             onClick={scrollToQuotation}
             className="bg-[#C6936A] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
@@ -143,14 +141,15 @@ export default function ClientHomePage() {
       {/* 🎪 HERO SECTION */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-10">
         <div className="text-center space-y-3">
-          <div className="w-24 h-24 mx-auto relative rounded-full border-2 border-[#C6936A] p-1 shadow-md">
-            <div className="w-full h-full relative rounded-full overflow-hidden">
-              <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-cover" />
-            </div>
+          {/* ໂລໂກ້ກາງໜ້າ - ລົບບໍເດີ້ວົງມົນຊ້ອນອອກໃຫ້ພໍດີ */}
+          <div className="w-24 h-24 mx-auto relative rounded-full overflow-hidden shadow-sm">
+            <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-cover" />
           </div>
-          <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3 py-1 rounded-full border border-[#E8D0C8]">
-            KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)
-          </span>
+          <div className="inline-block">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
+              KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)
+            </span>
+          </div>
           <h2 className="text-2xl md:text-4xl font-extrabold text-[#3D2B27]">
             ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ <span className="text-[#C6936A]">ກະຕູບສ໌ ບໍລິການ</span>
           </h2>
@@ -168,8 +167,17 @@ export default function ClientHomePage() {
               return (
                 <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
                   <div className="space-y-3">
-                    <div className="h-32 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
-                      <Image src={item.img} alt={item.name} fill className="object-cover" />
+                    {/* ຮູບອຸປະກອນ - ດຶງຈາກ public/ */}
+                    <div className="h-36 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
+                      <Image 
+                        src={item.img} 
+                        alt={item.name} 
+                        fill 
+                        className="object-cover"
+                        onError={(e: any) => {
+                          e.target.src = '/logo.png'; // ຮູບສຳຮອງຖ້າຫາຮູບໃນ public ບໍ່ເຫັນ
+                        }}
+                      />
                     </div>
                     <div>
                       <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
@@ -198,7 +206,7 @@ export default function ClientHomePage() {
             })}
           </div>
 
-          {/* 📝 ຟອມອອກໃບສະເໜີລາຄາ (ມີ id="quotation-form" ເພື່ອໃຫ້ປຸ່ມກົດເລື່ອນມາ) */}
+          {/* 📝 ຟອມອອກໃບສະເໜີລາຄາ */}
           <div id="quotation-form" className="bg-white p-6 rounded-3xl border-2 border-[#C6936A] shadow-md h-fit space-y-5 scroll-mt-24">
             <div>
               <h3 className="font-extrabold text-[#8C5345] text-base">📝 ຟອມອອກໃບສະເໜີລາຄາ / ຈອງອຸປະກອນ</h3>
