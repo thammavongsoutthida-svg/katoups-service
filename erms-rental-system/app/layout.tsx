@@ -1,15 +1,27 @@
-'use client'
-import './globals.css' // 👈 ເພີ່ມແຖບນີ້ເຂົ້າໄປເທິງສຸດ
-import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import './globals.css';
+import type { Metadata } from 'next';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  
+export const metadata: Metadata = {
+  title: 'KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
+  description: 'ກະຕູບສ໌ ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
-      {/* ໂຄ້ດສ່ວນທີ່ເຫຼືອຄືເກົ່າ */}
-      {children}
-    </div>
-  )
+    <html lang="lo">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-[#FAF3F0] text-[#3D2B27] antialiased">
+        {children}
+      </body>
+    </html>
+  );
 }

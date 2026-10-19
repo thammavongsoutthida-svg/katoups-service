@@ -1,28 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer base {
+  :root {
+    --font-lao: 'Noto Sans Lao', sans-serif;
+    --bg-primary: #FAF3F0;
+    --bg-card: #FFFFFF;
+    --brand-rose: #A36B5E;
+    --brand-rose-dark: #8C5345;
+    --brand-gold: #C6936A;
+    --text-primary: #3D2B27;
+    --border-light: #E8D0C8;
+  }
 
-:root {
-  --font-lao: 'Noto Sans Lao', sans-serif;
-  --bg-primary: #FDF8F7;
-  --bg-card: #FFFFFF;
-  --brand-rose: #A36B5E;
-  --brand-rose-dark: #8C5345;
-  --brand-gold: #C6936A;
-  --text-primary: #3D2B27;
-  --border-light: #F2DCD7;
-}
+  * {
+    font-family: var(--font-lao) !important;
+    box-sizing: border-box;
+  }
 
-* {
-  font-family: var(--font-lao) !important;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  margin: 0;
-  padding: 0;
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+  }
 }
