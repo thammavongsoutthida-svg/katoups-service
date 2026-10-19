@@ -1,4 +1,6 @@
 'use client';
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
@@ -101,8 +103,14 @@ export default function ClientHomePage() {
 
   const [bookedDates, setBookedDates] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [todayMin, setTodayMin] = useState<string>('');
 
-  // 🔄 1. ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase
+  // 🗓️ ຕັ້ງວັນທີປັດຈຸບັນຝ່າຍ Client-side ເພື່ອປ້ອງກັນ Build Fail
+  useEffect(() => {
+    setTodayMin(new Date().toISOString().split('T')[0]);
+  }, []);
+
+  // 🔄 ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase
   const fetchBookedDates = async () => {
     try {
       const { data } = await supabase
@@ -197,10 +205,10 @@ export default function ClientHomePage() {
   const deposit30 = totalAmount * 0.3;
   const balance70 = totalAmount - deposit30;
 
-  // 📱 ຟັງຊັນຈຳກັດເບີໂທ strictly ບໍ່ໃຫ້ເກີນ 11 ຕົວເລກ [02051702676]
+  // 📱 ຟັງຊັນຈຳກັດເບີໂທ strictly ບໍ່ໃຫ້ເກີນ 11 ຕົວເລກ
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleanNumbersOnly = e.target.value.replace(/\D/g, ''); // ລົບຕົວອັກສອນອື່ນອອກ
-    const limitedPhone = cleanNumbersOnly.slice(0, 11); // ຕັດສະເພາະ 11 ຕົວ ທຳອິດ
+    const cleanNumbersOnly = e.target.value.replace(/\D/g, '');
+    const limitedPhone = cleanNumbersOnly.slice(0, 11);
     setPhone(limitedPhone);
   };
 
@@ -256,7 +264,6 @@ export default function ClientHomePage() {
     };
 
     try {
-      // 🚀 ບັນທຶກຂໍ້ມູນລົງ Supabase (ແອັດມິນຈະເຫັນໃນ Dashboard ທັນທີ)
       const { error } = await supabase
         .from('orders')
         .insert([newOrder]);
@@ -268,7 +275,6 @@ export default function ClientHomePage() {
         return;
       }
 
-      // ✅ ສະແດງ Modal ເມື່ອບັນທຶກເຖິງ Admin ສຳເລັດ
       setShowInvoiceModal({
         orderNo,
         customerName,
@@ -468,7 +474,7 @@ export default function ClientHomePage() {
                     type="date"
                     required
                     value={startDate}
-                    min={new Date().toISOString().split('T')[0]}
+                    min={todayMin}
                     onChange={handleStartDateChange}
                     className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
                   />
@@ -478,7 +484,7 @@ export default function ClientHomePage() {
                   <input
                     type="date"
                     value={endDate}
-                    min={startDate || new Date().toISOString().split('T')[0]}
+                    min={startDate || todayMin}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
                   />
