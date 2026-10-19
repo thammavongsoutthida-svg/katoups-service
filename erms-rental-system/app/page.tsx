@@ -38,7 +38,7 @@ export default function ClientHomePage() {
     { id: 'g-5', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden VIP', img: '/45.jpeg' },
     { id: 'g-6', title: 'ງານປະດັບໄຟ ແລະ ເຕັ້ນປະດັບ', img: '/56.jpeg' },
     { id: 'g-7', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic', img: '/656.jpeg' },
-    { id: 'g-8', title: 'ພັດລົມໄອເຢັນ', img: '/656565.jpeg' },
+    { id: 'g-8', title: 'ດອກໄຟແຊນເດີເລຍ', img: '/656565.jpeg' },
   ];
 
   const scrollToQuotation = () => {
