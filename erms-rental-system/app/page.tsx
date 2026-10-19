@@ -30,13 +30,14 @@ const translations = {
     customerNameLabel: 'ຊື່ລູກຄ້າ / ບໍລິສັດ *',
     customerNamePlaceholder: 'ປ້ອນຊື່ ແລະ ນາມສະກຸນ',
     phoneLabel: 'ເບີໂທຕິດຕໍ່ (WhatsApp) * (ສູງສຸດ 11 ຕົວ)',
+    phonePlaceholder: '02051702676',
     startDateLabel: 'ວັນທີເລີ່ມເຊົ່າ *',
     endDateLabel: 'ວັນທີສົ່ງເຄື່ອງ',
     locationLabel: 'ສະຖານທີ່ຈັດງານ',
     submitBtn: '✨ ຢືນຢັນການຈອງ / ອອກໃບສະເໜີລາຄາ',
-    submittingBtn: '⏳ ກຳລັງບັນທຶກ...',
+    submittingBtn: '⏳ ກຳລັງສົ່ງຂໍ້ມູນຫາແອັດມິນ...',
     floatingBtn: '📝 ໄປຫາໃບສະເໜີລາຄາ',
-    modalTitle: 'ໃບສະເໜີລາຄາສຳເລັດ!',
+    modalTitle: 'ໃບສະເໜີລາຄາສຳເລັດ! ສົ່ງຂໍ້ມູນຫາແອັດມິນແລ້ວ',
     orderNoLabel: 'ໝາຍເລກອໍເດີ:',
     customerLabel: 'ຊື່ລູກຄ້າ:',
     phoneModalLabel: 'ເບີໂທ:',
@@ -69,18 +70,19 @@ const translations = {
     customerNameLabel: 'Customer / Company Name *',
     customerNamePlaceholder: 'Enter your full name',
     phoneLabel: 'Contact Number (WhatsApp) * (Max 11 digits)',
+    phonePlaceholder: '02051702676',
     startDateLabel: 'Start Date *',
     endDateLabel: 'End Date',
     locationLabel: 'Event Location',
-    submitBtn: '✨ Confirm Booking / Get Quotation',
-    submittingBtn: '⏳ Saving...',
+    submitBtn: '✨ Confirm Booking / Send to Admin',
+    submittingBtn: '⏳ Sending to Admin...',
     floatingBtn: '📝 Go to Quotation',
-    modalTitle: 'Quotation Generated!',
+    modalTitle: 'Booking Sent to Admin Successfully!',
     orderNoLabel: 'Order No:',
     customerLabel: 'Customer Name:',
     phoneModalLabel: 'Phone:',
     eventDateLabel: 'Event Date:',
-    sendWhatsappBtn: '📲 Send Order to WhatsApp',
+    sendWhatsappBtn: '📲 Send Order via WhatsApp',
     closeBtn: '❌ Close',
   },
 };
@@ -94,35 +96,45 @@ export default function ClientHomePage() {
   const [phone, setPhone] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [location, setLocation] = useState('Thakhek, Khammouane');
+  const [location, setLocation] = useState('ທ່າແຂກ, ຄຳມ່ວນ');
   const [showInvoiceModal, setShowInvoiceModal] = useState<any>(null);
 
-  // 📅 State ສຳລັບເກັບວັນທີໆຄິວເຕັມແລ້ວ
   const [bookedDates, setBookedDates] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 🔄 1. ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase
-  useEffect(() => {
-    const fetchBookedDates = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('orders')
-          .select('event_date')
-          .neq('status', 'CANCELLED');
+  const fetchBookedDates = async () => {
+    try {
+      const { data } = await supabase
+        .from('orders')
+        .select('event_date')
+        .neq('status', 'CANCELLED');
 
-        if (data) {
-          const dates = data.map((item: any) => item.event_date).filter(Boolean);
-          setBookedDates(dates);
-        }
-      } catch (err) {
-        console.error('Error fetching booked dates:', err);
+      if (data) {
+        const dates = data.map((item: any) => item.event_date).filter(Boolean);
+        setBookedDates(dates);
       }
-    };
+    } catch (err) {
+      console.error('Error fetching booked dates:', err);
+    }
+  };
 
+  useEffect(() => {
     fetchBookedDates();
+
+    // ⚡ Realtime Listener
+    const channel = supabase
+      .channel('public:orders')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+        fetchBookedDates();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
-  // 🎪 2. ເມນູລາຍການອຸປະກອນເຊົ່າ
   const stockItems = [
     { id: 'eq-1', name: lang === 'la' ? 'ເຕັ້ນ Marquee VIP 10x12' : 'VIP Marquee Tent 10x12m', price: 8000000, img: '/tt.png' },
     { id: 'eq-2', name: lang === 'la' ? 'ເຕັ້ນ Marquee 6x8' : 'Marquee Tent 6x8m', price: 1500000, img: '/tt.png' },
@@ -138,7 +150,6 @@ export default function ClientHomePage() {
     { id: 'eq-12', name: lang === 'la' ? 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ' : 'Evaporative Air Cooler & Decor Set', price: 1000000, img: '/tt.png' },
   ];
 
-  // 📸 3. ຮູບພາບຜົນງານທາງຮ້ານ
   const galleryImages = [
     { id: 'g-1', title: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Golden ງານປະຊຸມ' : 'Tiffany Golden Conference Set', img: '/11.jpeg' },
     { id: 'g-2', title: lang === 'la' ? 'ເຕັ້ນປະດັບ Decorative Marquee VIP' : 'Decorative Marquee VIP Setup', img: '/12.jpeg' },
@@ -186,15 +197,13 @@ export default function ClientHomePage() {
   const deposit30 = totalAmount * 0.3;
   const balance70 = totalAmount - deposit30;
 
-  // 📱 ຟັງຊັນຈຳກັດເບີໂທບໍ່ໃຫ້ກາຍ 11 ຕົວ (02051702676)
+  // 📱 ຟັງຊັນຈຳກັດເບີໂທ strictly ບໍ່ໃຫ້ເກີນ 11 ຕົວເລກ [02051702676]
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.replace(/\D/g, ''); // ຮັບແຕ່ເລກ
-    if (val.length <= 11) {
-      setPhone(val);
-    }
+    const cleanNumbersOnly = e.target.value.replace(/\D/g, ''); // ລົບຕົວອັກສອນອື່ນອອກ
+    const limitedPhone = cleanNumbersOnly.slice(0, 11); // ຕັດສະເພາະ 11 ຕົວ ທຳອິດ
+    setPhone(limitedPhone);
   };
 
-  // 📅 ຟັງຊັນກວດວັນທີໆເລືອກ ວ່າຄິວເຕັມແລ້ວບໍ
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
     if (bookedDates.includes(selected)) {
@@ -208,7 +217,7 @@ export default function ClientHomePage() {
     }
   };
 
-  // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database 100%
+  // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database ຫາ Admin 100%
   const handleCreateQuotation = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -217,7 +226,7 @@ export default function ClientHomePage() {
     }
 
     if (!phone || phone.length < 10) {
-      return alert(lang === 'la' ? 'ກະລຸນາປ້ອນເບີໂທໃຫ້ຖືກຕ້ອງ (ຕົວຢ່າງ: 02051702676)' : 'Please enter a valid phone number');
+      return alert(lang === 'la' ? 'ກະລຸນາປ້ອນເບີໂທໃຫ້ຖືກຕ້ອງ (10-11 ຕົວເລກ, ຕົວຢ່າງ: 02051702676)' : 'Please enter a valid phone number (10-11 digits)');
     }
 
     if (!startDate) {
@@ -247,20 +256,19 @@ export default function ClientHomePage() {
     };
 
     try {
-      // 🚀 ສົ່ງຂໍ້ມູນລົງ Supabase Orders Table
-      const { data, error } = await supabase
+      // 🚀 ບັນທຶກຂໍ້ມູນລົງ Supabase (ແອັດມິນຈະເຫັນໃນ Dashboard ທັນທີ)
+      const { error } = await supabase
         .from('orders')
-        .insert([newOrder])
-        .select();
+        .insert([newOrder]);
 
       if (error) {
         console.error('Supabase Insert Error:', error);
-        alert(`❌ Error saving to Database: ${error.message}`);
+        alert(`❌ Error sending order to Admin: ${error.message}`);
         setIsSubmitting(false);
         return;
       }
 
-      // ✅ ບັນທຶກສຳເລັດ -> ສະແດງ Modal
+      // ✅ ສະແດງ Modal ເມື່ອບັນທຶກເຖິງ Admin ສຳເລັດ
       setShowInvoiceModal({
         orderNo,
         customerName,
@@ -271,8 +279,7 @@ export default function ClientHomePage() {
         balance70,
       });
 
-      // ອັບເດັດຄິວເຕັມໃນ ໜ້າຈໍທັນທີ
-      setBookedDates((prev) => [...prev, startDate]);
+      await fetchBookedDates();
 
     } catch (err: any) {
       console.error('Unexpected Error:', err);
@@ -284,16 +291,11 @@ export default function ClientHomePage() {
 
   return (
     <div className="min-h-screen bg-[#FAF3F0] font-['Noto_Sans_Lao',sans-serif] text-[#3D2B27]">
-      {/* 👑 HEADER NAVBAR */}
+      {/* HEADER NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
-            <Image 
-              src="/logo.png" 
-              alt="Katoups Logo" 
-              fill 
-              className="object-contain" 
-            />
+            <Image src="/logo.png" alt="Katoups Logo" fill className="object-contain" />
           </div>
           <div>
             <h1 className="font-extrabold text-[#C6936A] text-base leading-none">{t.siteTitle}</h1>
@@ -302,39 +304,25 @@ export default function ClientHomePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={scrollToQuotation}
-            className="bg-[#8C5345] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
-          >
+          <button onClick={scrollToQuotation} className="bg-[#8C5345] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>🛒 {t.cart} ({cartTotalItems})</span>
           </button>
 
-          <button
-            onClick={scrollToQuotation}
-            className="bg-[#C6936A] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
-          >
+          <button onClick={scrollToQuotation} className="bg-[#C6936A] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>📄 {t.quotationBtn}</span>
           </button>
 
-          <button
-            onClick={() => setLang(lang === 'la' ? 'en' : 'la')}
-            className="text-xs border border-[#C6936A] bg-[#FAF3F0] text-[#C6936A] font-extrabold px-3 py-1 rounded-full hover:bg-white transition"
-          >
+          <button onClick={() => setLang(lang === 'la' ? 'en' : 'la')} className="text-xs border border-[#C6936A] bg-[#FAF3F0] text-[#C6936A] font-extrabold px-3 py-1 rounded-full hover:bg-white transition">
             🌐 {lang === 'la' ? 'EN' : 'LA'}
           </button>
         </div>
       </header>
 
-      {/* 🎪 HERO SECTION */}
+      {/* HERO SECTION */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
         <div className="text-center space-y-3">
           <div className="w-32 h-32 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
-            <Image 
-              src="/logo.png" 
-              alt="Katoups Logo Large" 
-              fill 
-              className="object-contain" 
-            />
+            <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-contain" />
           </div>
           <div className="inline-block">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
@@ -349,7 +337,7 @@ export default function ClientHomePage() {
           </p>
         </div>
 
-        {/* 📸 1. SECTION ພາບຜົນງານທາງຮ້ານ */}
+        {/* SECTION ພາບຜົນງານ */}
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b border-[#E8D0C8] pb-2">
             <div>
@@ -367,13 +355,7 @@ export default function ClientHomePage() {
             {galleryImages.map((g) => (
               <div key={g.id} className="group relative bg-white rounded-3xl overflow-hidden border border-[#E8D0C8] shadow-sm hover:shadow-lg transition duration-300">
                 <div className="h-56 sm:h-64 w-full relative bg-[#FAF3F0]">
-                  <Image 
-                    src={g.img} 
-                    alt={g.title} 
-                    fill 
-                    className="object-cover group-hover:scale-105 transition duration-500" 
-                    onError={(e: any) => { e.target.srcset = '/logo.png'; }}
-                  />
+                  <Image src={g.img} alt={g.title} fill className="object-cover group-hover:scale-105 transition duration-500" onError={(e: any) => { e.target.srcset = '/logo.png'; }} />
                 </div>
                 <div className="p-3 text-center bg-white border-t border-[#FAF3F0]">
                   <p className="text-xs font-bold text-[#3D2B27]">{g.title}</p>
@@ -383,7 +365,7 @@ export default function ClientHomePage() {
           </div>
         </section>
 
-        {/* 🛍️ 2. SECTION ເມນູເລືອກເຊົ່າອຸປະກອນ & ຟອມອອກໃບສະເໜີລາຄາ */}
+        {/* SECTION ເມນູເລືອກເຊົ່າ & ຟອມ */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             <div className="border-b border-[#E8D0C8] pb-2">
@@ -398,13 +380,7 @@ export default function ClientHomePage() {
                   <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
                     <div className="space-y-3">
                       <div className="h-32 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
-                        <Image 
-                          src={item.img} 
-                          alt={item.name} 
-                          fill 
-                          className="object-cover"
-                          onError={(e: any) => { e.target.srcset = '/logo.png'; }}
-                        />
+                        <Image src={item.img} alt={item.name} fill className="object-cover" onError={(e: any) => { e.target.srcset = '/logo.png'; }} />
                       </div>
                       <div>
                         <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
@@ -414,10 +390,7 @@ export default function ClientHomePage() {
 
                     <div className="mt-4">
                       {qty === 0 ? (
-                        <button
-                          onClick={() => addToCart(item.id)}
-                          className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition"
-                        >
+                        <button onClick={() => addToCart(item.id)} className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition">
                           {t.addToCart}
                         </button>
                       ) : (
@@ -479,7 +452,9 @@ export default function ClientHomePage() {
                   type="text"
                   required
                   maxLength={11}
-                  placeholder="02051702676"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                  placeholder={t.phonePlaceholder}
                   value={phone}
                   onChange={handlePhoneChange}
                   className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345] font-mono"
@@ -531,19 +506,6 @@ export default function ClientHomePage() {
           </div>
         </div>
       </main>
-
-      {/* 📱 ປຸ່ມລອຍໃບສະເໜີລາຄາ (ສະແດງສະເພາະມືຖື) */}
-      <button
-        onClick={scrollToQuotation}
-        className="fixed bottom-6 right-4 bg-[#8C5345] text-white px-4 py-3 rounded-full shadow-2xl font-bold text-xs flex items-center gap-2 z-50 hover:scale-105 transition active:scale-95 md:hidden border-2 border-white"
-      >
-        <span>{t.floatingBtn}</span>
-        {cartTotalItems > 0 && (
-          <span className="bg-amber-400 text-black w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-black">
-            {cartTotalItems}
-          </span>
-        )}
-      </button>
 
       {/* 📄 MODAL INVOICE */}
       {showInvoiceModal && (
