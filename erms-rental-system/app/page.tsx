@@ -13,20 +13,32 @@ export default function ClientHomePage() {
   const [location, setLocation] = useState('ທ່າແຂກ, ຄຳມ່ວນ');
   const [showInvoiceModal, setShowInvoiceModal] = useState<any>(null);
 
-  // 🎪 ລາຍການອຸປະກອນ (ສາມາດປ່ຽນ Path ຮູບຢູ່ຊ່ອງ img ເພື່ອດຶງຮູບອື່ນຈາກ public ມາໃສ່ຕາມຫຼັງໄດ້)
+  // 🎪 1. ເມນູລາຍການອຸປະກອນເຊົ່າ (ໃສ່ຮູບຈາກໂຟນເດີ້ public ຄົບທຸກລາຍການ)
   const stockItems = [
-    { id: 'eq-1', name: 'ເຕັ້ນ Marquee 10x12', price: 8000000, img: '/11.jpeg' },
+    { id: 'eq-1', name: 'ເຕັ້ນ Marquee VIP 10x12', price: 8000000, img: '/11.jpeg' },
     { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/12.jpeg' },
     { id: 'eq-3', name: 'ເຕັ້ນ Marquee 5x8', price: 1000000, img: '/13.jpeg' },
-    { id: 'eq-4', name: 'ເຕັ້ນ Marquee 4x6', price: 500000, img: '/45.jpeg' },
-    { id: 'eq-5', name: 'ເຕັ້ນ Marquee 4x4', price: 400000, img: '/56.jpeg' },
-    { id: 'eq-11', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)', price: 150000, img: '/65.jpeg' },
-    { id: 'eq-12', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)', price: 250000, img: '/65.jpeg' },
-    { id: 'eq-13', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (1) (8 ທ່ານ)', price: 60000, img: '/65.jpeg' },
-    { id: 'eq-14', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (2) (8 ທ່ານ)', price: 250000, img: '/65.jpeg' },
-    { id: 'eq-15', name: 'ພັດລົມ (Fan)', price: 100000, img: '/65.jpeg' },
-    { id: 'eq-16', name: 'ພັດລົມໄອເຢັນ (Evaporative Air Cooler)', price: 1000000, img: '/65.jpeg' },
-    { id: 'eq-17', name: 'ຫຍ້າທຽມ (Artificial Grass)', price: 200000, img: '/65.jpeg' },
+    { id: 'eq-4', name: 'ເຕັ້ນ Marquee 4x6', price: 500000, img: '/44.jpeg' },
+    { id: 'eq-5', name: 'ເຕັ້ນ Marquee 4x4', price: 400000, img: '/45.jpeg' },
+    { id: 'eq-6', name: 'ເຕັ້ນປະດັບ Decorative Marquee 10x12', price: 4000000, img: '/56.jpeg' },
+    { id: 'eq-7', name: 'ເຕັ້ນປະດັບ Decorative Marquee 6x8', price: 1000000, img: '/66.jpeg' },
+    { id: 'eq-8', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)', price: 150000, img: '/99.jpeg' },
+    { id: 'eq-9', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)', price: 250000, img: '/656.jpeg' },
+    { id: 'eq-10', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (1) (8 ທ່ານ)', price: 60000, img: '/666.jpeg' },
+    { id: 'eq-11', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (2)', price: 250000, img: '/3333.jpeg' },
+    { id: 'eq-12', name: 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ', price: 1000000, img: '/656565.jpeg' },
+  ];
+
+  // 📸 2. ຮູບພາບຜົນງານທາງຮ້ານ (ດຶງຮູບຈາກ public ມາໂຊແຍກຕ່າງຫ່າງ)
+  const galleryImages = [
+    { id: 'g-1', title: 'ເຕັ້ນ Marquee VIP', img: '/11.jpeg' },
+    { id: 'g-2', title: 'ເຕັ້ນປະດັບງານລ້ຽງ', img: '/12.jpeg' },
+    { id: 'g-3', title: 'ບັນຍາກາດງານລ້ຽງ', img: '/13.jpeg' },
+    { id: 'g-4', title: 'ເຕັ້ນໂຄງສ້າງສີຂາວ', img: '/44.jpeg' },
+    { id: 'g-5', title: 'ຊຸດໂຕະຕັ່ງ VIP', img: '/45.jpeg' },
+    { id: 'g-6', title: 'ງານປະດັບໄຟກາງຄືນ', img: '/56.jpeg' },
+    { id: 'g-7', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden', img: '/656.jpeg' },
+    { id: 'g-8', title: 'ອຸປະກອນຈັດງານລ້ຽງ', img: '/656565.jpeg' },
   ];
 
   const scrollToQuotation = () => {
@@ -104,9 +116,9 @@ export default function ClientHomePage() {
       {/* 👑 HEADER NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
-          {/* ໂລໂກ້ເທິງ Header - ແປງໃຫ້ພໍດີບໍ່ມີວົງມົນຊ້ອນ */}
-          <div className="w-10 h-10 relative rounded-full overflow-hidden">
-            <Image src="/logo.png" alt="Katoups Logo" fill className="object-cover" />
+          {/* 🎯 ໂໂລໂກ້ເທິງ Header: ປັບໃສ່ object-contain ໃຫ້ພໍດີວົງມົນ */}
+          <div className="w-11 h-11 relative rounded-full overflow-hidden bg-white border border-[#C6936A]/40 flex items-center justify-center p-0.5 shadow-sm">
+            <Image src="/logo.png" alt="Katoups Logo" fill className="object-contain rounded-full p-0.5" />
           </div>
           <div>
             <h1 className="font-extrabold text-[#C6936A] text-base leading-none">ກະຕູບສ໌ ບໍລິການ</h1>
@@ -139,11 +151,11 @@ export default function ClientHomePage() {
       </header>
 
       {/* 🎪 HERO SECTION */}
-      <main className="max-w-6xl mx-auto px-4 py-8 space-y-10">
+      <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
         <div className="text-center space-y-3">
-          {/* ໂລໂກ້ກາງໜ້າ - ລົບບໍເດີ້ວົງມົນຊ້ອນອອກໃຫ້ພໍດີ */}
-          <div className="w-24 h-24 mx-auto relative rounded-full overflow-hidden shadow-sm">
-            <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-cover" />
+          {/* 🎯 ໂລໂກ້ກາງໜ້າ: ປັບໃສ່ p-1 ແລະ object-contain ໃຫ້ພໍດີກັບວົງມົນ ບໍ່ມີສ່ວນເກີນ */}
+          <div className="w-28 h-28 mx-auto relative rounded-full overflow-hidden border-2 border-[#C6936A] shadow-md bg-white p-1">
+            <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-contain rounded-full p-1" />
           </div>
           <div className="inline-block">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
@@ -158,52 +170,90 @@ export default function ClientHomePage() {
           </p>
         </div>
 
-        {/* 🛍️ PRODUCT GRID & QUOTATION FORM */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ລາຍການອຸປະກອນ */}
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {stockItems.map((item) => {
-              const qty = cart[item.id] || 0;
-              return (
-                <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                  <div className="space-y-3">
-                    {/* ຮູບອຸປະກອນ - ດຶງຈາກ public/ */}
-                    <div className="h-36 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
-                      <Image 
-                        src={item.img} 
-                        alt={item.name} 
-                        fill 
-                        className="object-cover"
-                        onError={(e: any) => {
-                          e.target.src = '/logo.png'; // ຮູບສຳຮອງຖ້າຫາຮູບໃນ public ບໍ່ເຫັນ
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
-                      <p className="text-sm font-extrabold text-[#8C5345] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">/ຊຸດ/ມື້</span></p>
-                    </div>
-                  </div>
+        {/* 📸 1. SECTION ພາບຜົນງານທາງຮ້ານ */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between border-b border-[#E8D0C8] pb-2">
+            <div>
+              <h3 className="text-lg md:text-xl font-black text-[#A36B5E] flex items-center gap-2">
+                <span>✨</span> ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ກະຕູບສ໌ ບໍລິການ
+              </h3>
+              <p className="text-xs text-gray-400 font-bold">ຕົວຢ່າງງານຕິດຕັ້ງເຕັ້ນ VIP, ຊຸດໂຕະຕັ່ງ ແລະ ການປະດັບປະດາ</p>
+            </div>
+            <span className="text-xs font-bold text-[#C6936A] bg-white px-3 py-1 rounded-full border border-[#E8D0C8]">
+              {galleryImages.length} ຜົນງານ
+            </span>
+          </div>
 
-                  <div className="mt-4">
-                    {qty === 0 ? (
-                      <button
-                        onClick={() => addToCart(item.id)}
-                        className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition"
-                      >
-                        + ເພີ່ມເຂົ້າໃນຕະກ້າ
-                      </button>
-                    ) : (
-                      <div className="flex items-center justify-between bg-[#FAF3F0] rounded-xl p-1 border border-[#E8D0C8]">
-                        <button onClick={() => removeFromCart(item.id)} className="w-7 h-7 bg-white text-[#8C5345] font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">-</button>
-                        <span className="font-extrabold text-xs text-[#8C5345]">{qty}</span>
-                        <button onClick={() => addToCart(item.id)} className="w-7 h-7 bg-[#8C5345] text-white font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">+</button>
-                      </div>
-                    )}
-                  </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+            {galleryImages.map((g) => (
+              <div key={g.id} className="group relative bg-white rounded-2xl overflow-hidden border border-[#E8D0C8] shadow-sm hover:shadow-md transition">
+                <div className="h-28 w-full relative bg-[#FAF3F0]">
+                  <Image 
+                    src={g.img} 
+                    alt={g.title} 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition duration-300" 
+                    onError={(e: any) => { e.target.srcset = '/logo.png'; }}
+                  />
                 </div>
-              );
-            })}
+                <div className="p-1.5 text-center bg-white">
+                  <p className="text-[10px] font-bold text-[#3D2B27] truncate">{g.title}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 🛍️ 2. SECTION ເມນູເລືອກເຊົ່າອຸປະກອນ & ຟອມອອກໃບສະເໜີລາຄາ */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* ລາຍການອຸປະກອນໃຫ້ເລືອກ */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="border-b border-[#E8D0C8] pb-2">
+              <h3 className="text-lg font-black text-[#8C5345]">🎪 ເລືອກອຸປະກອນເຊົ່າ</h3>
+              <p className="text-xs text-gray-400 font-bold">ຄລິກເພີ່ມອຸປະກອນເຂົ້າໃນຕະກ້າເພື່ອຄິດໄລ່ຄ່າເຊົ່າ</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {stockItems.map((item) => {
+                const qty = cart[item.id] || 0;
+                return (
+                  <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div className="space-y-3">
+                      <div className="h-36 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
+                        <Image 
+                          src={item.img} 
+                          alt={item.name} 
+                          fill 
+                          className="object-cover"
+                          onError={(e: any) => { e.target.srcset = '/logo.png'; }}
+                        />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
+                        <p className="text-sm font-extrabold text-[#8C5345] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">/ຊຸດ/ມື້</span></p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      {qty === 0 ? (
+                        <button
+                          onClick={() => addToCart(item.id)}
+                          className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition"
+                        >
+                          + ເພີ່ມເຂົ້າໃນຕະກ້າ
+                        </button>
+                      ) : (
+                        <div className="flex items-center justify-between bg-[#FAF3F0] rounded-xl p-1 border border-[#E8D0C8]">
+                          <button onClick={() => removeFromCart(item.id)} className="w-7 h-7 bg-white text-[#8C5345] font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">-</button>
+                          <span className="font-extrabold text-xs text-[#8C5345]">{qty}</span>
+                          <button onClick={() => addToCart(item.id)} className="w-7 h-7 bg-[#8C5345] text-white font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">+</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* 📝 ຟອມອອກໃບສະເໜີລາຄາ */}
