@@ -84,7 +84,7 @@ export default function ClientHomePage() {
     { id: 'eq-11', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)' : 'Set Tiffany Classic (8 people)', price: 150000, unit: lang === 'la' ? 'ຊຸດ/ມື້' : 'set/day', icon: '🪑' },
     { id: 'eq-12', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)' : 'Set Tiffany Golden (8 people)', price: 250000, unit: lang === 'la' ? 'ຊຸດ/ມື້' : 'set/day', icon: '🪑' },
     { id: 'eq-13', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (1) (8 ທ່ານ)' : 'Set Plastic Chair (1) (8 people)', price: 60000, unit: lang === 'la' ? 'ຊຸດ/ມື້' : 'set/day', icon: '🪑' },
-    { id: 'eq-14', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (2) (8 ທ່ານ)' : 'Set Cover Plastic Chair (2) (8 people)', price: 25000, unit: lang === 'la' ? 'ຊຸດ/ມື້' : 'set/day', icon: '🪑' },
+    { id: 'eq-14', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (2) (8 ທ່ານ)' : 'Set Cover Plastic Chair (2) (8 people)', price: 250000, unit: lang === 'la' ? 'ຊຸດ/ມື້' : 'set/day', icon: '🪑' },
     { id: 'eq-15', name: lang === 'la' ? 'ພັດລົມ (Fan)' : 'Fan', price: 100000, unit: lang === 'la' ? 'ເຄື່ອງ/ມື້' : 'piece/day', icon: '🌀' },
     { id: 'eq-16', name: lang === 'la' ? 'ພັດລົມໄອເຢັນ (Evaporative Air Cooler)' : 'Evaporative Air Cooler', price: 1000000, unit: lang === 'la' ? 'ເຄື່ອງ/ມື້' : 'piece/day', icon: '❄️' },
     { id: 'eq-17', name: lang === 'la' ? 'ຫຍ້າທຽມ (Artificial Grass)' : 'Artificial Grass', price: 200000, unit: lang === 'la' ? 'ຜືນ/ມື້' : 'piece/day', icon: '🌿' },
