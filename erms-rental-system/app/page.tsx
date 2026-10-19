@@ -3,14 +3,98 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
+// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN)
+const translations = {
+  la: {
+    siteTitle: 'ກະຕູບສ໌ ບໍລິການ',
+    siteSubtitle: 'KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
+    cart: 'ຕະກ້າ',
+    quotationBtn: 'ໃບສະເໜີລາຄາ',
+    heroTag: 'KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)',
+    heroTitle: 'ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
+    heroDesc: 'ຍົກລະດັບງານລ້ຽງຂອງທ່ານດ້ວຍເຕັ້ນ Marquee ຫຍູ້ຫລາ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ແລະ ອຸປະກອນຈັດງານລ້ຽງຄົບວົງຈອນ.',
+    galleryTitle: 'ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ກະຕູບສ໌ ບໍລິການ',
+    gallerySubtitle: 'ຕົວຢ່າງງານຕິດຕັ້ງເຕັ້ນ VIP, ຊຸດໂຕະຕັ່ງ ແລະ ການປະດັບປະດາ',
+    works: 'ຜົນງານ',
+    selectEquipment: 'ເລືອກອຸປະກອນເຊົ່າ',
+    selectDesc: 'ຄລິກເພີ່ມອຸປະກອນເຂົ້າໃນຕະກ້າເພື່ອຄິດໄລ່ຄ່າເຊົ່າ',
+    perDay: '/ຊຸດ/ມື້',
+    addToCart: '+ ເພີ່ມເຂົ້າໃນຕະກ້າ',
+    quotationFormTitle: '📝 ຟອມອອກໃບສະເໜີລາຄາ / ຈອງອຸປະກອນ',
+    quotationFormDesc: 'ເລືອກອຸປະກອນແລ້ວປ້ອນຂໍ້ມູນເພື່ອອອກໃບສະເໜີລາຄາ',
+    totalItems: 'ຈຳນວນອຸປະກອນ:',
+    itemsCount: 'ລາຍການ',
+    totalRent: 'ລວມຄ່າເຊົ່າທັງໝົດ:',
+    deposit30: 'ມັດຈຳ (30%):',
+    balance70: 'ຈ່າຍມື້ຮັບເຄື່ອງ (70%):',
+    customerNameLabel: 'ຊື່ລູກຄ້າ / ບໍລິສັດ *',
+    customerNamePlaceholder: 'ປ້ອນຊື່ ແລະ ນາມສະກຸນ',
+    phoneLabel: 'ເບີໂທຕິດຕໍ່ (WhatsApp) * (ສູງສຸດ 11 ຕົວ)',
+    startDateLabel: 'ວັນທີເລີ່ມເຊົ່າ *',
+    endDateLabel: 'ວັນທີສົ່ງເຄື່ອງ',
+    locationLabel: 'ສະຖານທີ່ຈັດງານ',
+    submitBtn: '✨ ຢືນຢັນການຈອງ / ອອກໃບສະເໜີລາຄາ',
+    submittingBtn: '⏳ ກຳລັງບັນທຶກ...',
+    floatingBtn: '📝 ໄປຫາໃບສະເໜີລາຄາ',
+    modalTitle: 'ໃບສະເໜີລາຄາສຳເລັດ!',
+    orderNoLabel: 'ໝາຍເລກອໍເດີ:',
+    customerLabel: 'ຊື່ລູກຄ້າ:',
+    phoneModalLabel: 'ເບີໂທ:',
+    eventDateLabel: 'ວັນທີຈັດງານ:',
+    sendWhatsappBtn: '📲 ສົ່ງຂໍ້ມູນເຂົ້າ WhatsApp ຮ້ານ',
+    closeBtn: '❌ ປິດ',
+  },
+  en: {
+    siteTitle: 'Katoups Service',
+    siteSubtitle: 'KATOUPS SERVICE - Event Equipment Rental',
+    cart: 'Cart',
+    quotationBtn: 'Quotation',
+    heroTag: 'KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)',
+    heroTitle: 'Marquee Tent, Table, Chair & Event Equipment Rental',
+    heroDesc: 'Elevate your special events with luxury Marquee tents, Tiffany chair sets, evaporative air coolers, artificial grass, and complete event gear.',
+    galleryTitle: 'Portfolio & Setup Showcase',
+    gallerySubtitle: 'Examples of VIP Marquee setup, tables, chairs, and decor',
+    works: 'Works',
+    selectEquipment: 'Select Rental Items',
+    selectDesc: 'Click to add items to cart and calculate rental fee',
+    perDay: '/set/day',
+    addToCart: '+ Add to Cart',
+    quotationFormTitle: '📝 Quotation & Booking Form',
+    quotationFormDesc: 'Select equipment and fill details to generate a quote',
+    totalItems: 'Total Equipment:',
+    itemsCount: 'items',
+    totalRent: 'Total Rental Fee:',
+    deposit30: 'Deposit (30%):',
+    balance70: 'Balance on Delivery (70%):',
+    customerNameLabel: 'Customer / Company Name *',
+    customerNamePlaceholder: 'Enter your full name',
+    phoneLabel: 'Contact Number (WhatsApp) * (Max 11 digits)',
+    startDateLabel: 'Start Date *',
+    endDateLabel: 'End Date',
+    locationLabel: 'Event Location',
+    submitBtn: '✨ Confirm Booking / Get Quotation',
+    submittingBtn: '⏳ Saving...',
+    floatingBtn: '📝 Go to Quotation',
+    modalTitle: 'Quotation Generated!',
+    orderNoLabel: 'Order No:',
+    customerLabel: 'Customer Name:',
+    phoneModalLabel: 'Phone:',
+    eventDateLabel: 'Event Date:',
+    sendWhatsappBtn: '📲 Send Order to WhatsApp',
+    closeBtn: '❌ Close',
+  },
+};
+
 export default function ClientHomePage() {
   const [lang, setLang] = useState<'la' | 'en'>('la');
+  const t = translations[lang];
+
   const [cart, setCart] = useState<{ [key: string]: number }>({});
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [location, setLocation] = useState('ທ່າແຂກ, ຄຳມ່ວນ');
+  const [location, setLocation] = useState('Thakhek, Khammouane');
   const [showInvoiceModal, setShowInvoiceModal] = useState<any>(null);
 
   // 📅 State ສຳລັບເກັບວັນທີໆຄິວເຕັມແລ້ວ
@@ -40,30 +124,30 @@ export default function ClientHomePage() {
 
   // 🎪 2. ເມນູລາຍການອຸປະກອນເຊົ່າ
   const stockItems = [
-    { id: 'eq-1', name: 'ເຕັ້ນ Marquee VIP 10x12', price: 8000000, img: '/tt.png' },
-    { id: 'eq-2', name: 'ເຕັ້ນ Marquee 6x8', price: 1500000, img: '/tt.png' },
-    { id: 'eq-3', name: 'ເຕັ້ນ Marquee 5x8', price: 1000000, img: '/tt.png' },
-    { id: 'eq-4', name: 'ເຕັ້ນ Marquee 4x6', price: 500000, img: '/tt.png' },
-    { id: 'eq-5', name: 'ເຕັ້ນ Marquee 4x4', price: 400000, img: '/tt.png' },
-    { id: 'eq-6', name: 'ເຕັ້ນປະດັບ Decorative Marquee 10x12', price: 4000000, img: '/tt.png' },
-    { id: 'eq-7', name: 'ເຕັ້ນປະດັບ Decorative Marquee 6x8', price: 1000000, img: '/tt.png' },
-    { id: 'eq-8', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)', price: 150000, img: '/tt.png' },
-    { id: 'eq-9', name: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)', price: 250000, img: '/tt.png' },
-    { id: 'eq-10', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (8 ທ່ານ)', price: 60000, img: '/tt.png' },
-    { id: 'eq-11', name: 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (8 ທ່ານ)', price: 25000, img: '/tt.png' },
-    { id: 'eq-12', name: 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ', price: 1000000, img: '/tt.png' },
+    { id: 'eq-1', name: lang === 'la' ? 'ເຕັ້ນ Marquee VIP 10x12' : 'VIP Marquee Tent 10x12m', price: 8000000, img: '/tt.png' },
+    { id: 'eq-2', name: lang === 'la' ? 'ເຕັ້ນ Marquee 6x8' : 'Marquee Tent 6x8m', price: 1500000, img: '/tt.png' },
+    { id: 'eq-3', name: lang === 'la' ? 'ເຕັ້ນ Marquee 5x8' : 'Marquee Tent 5x8m', price: 1000000, img: '/tt.png' },
+    { id: 'eq-4', name: lang === 'la' ? 'ເຕັ້ນ Marquee 4x6' : 'Marquee Tent 4x6m', price: 500000, img: '/tt.png' },
+    { id: 'eq-5', name: lang === 'la' ? 'ເຕັ້ນ Marquee 4x4' : 'Marquee Tent 4x4m', price: 400000, img: '/tt.png' },
+    { id: 'eq-6', name: lang === 'la' ? 'ເຕັ້ນປະດັບ Decorative Marquee 10x12' : 'Decorative Marquee Tent 10x12m', price: 4000000, img: '/tt.png' },
+    { id: 'eq-7', name: lang === 'la' ? 'ເຕັ້ນປະດັບ Decorative Marquee 6x8' : 'Decorative Marquee Tent 6x8m', price: 1000000, img: '/tt.png' },
+    { id: 'eq-8', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Classic (8 ທ່ານ)' : 'Tiffany Classic Chair & Table Set (8 Seats)', price: 150000, img: '/tt.png' },
+    { id: 'eq-9', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Golden (8 ທ່ານ)' : 'Tiffany Golden Chair & Table Set (8 Seats)', price: 250000, img: '/tt.png' },
+    { id: 'eq-10', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງພລາສຕິກ (8 ທ່ານ)' : 'Plastic Table & Chair Set (8 Seats)', price: 60000, img: '/tt.png' },
+    { id: 'eq-11', name: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງພລາສຕິກ + ຜ້າກວມ (8 ທ່ານ)' : 'Plastic Table & Chair + Cover Set (8 Seats)', price: 25000, img: '/tt.png' },
+    { id: 'eq-12', name: lang === 'la' ? 'ພັດລົມໄອເຢັນ & ອຸປະກອນປະດັບ' : 'Evaporative Air Cooler & Decor Set', price: 1000000, img: '/tt.png' },
   ];
 
   // 📸 3. ຮູບພາບຜົນງານທາງຮ້ານ
   const galleryImages = [
-    { id: 'g-1', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden ງານປະຊຸມ', img: '/11.jpeg' },
-    { id: 'g-2', title: 'ເຕັ້ນປະດັບ Decorative Marquee VIP', img: '/12.jpeg' },
-    { id: 'g-3', title: 'ບັນຍາກາດການຈັດງານດອງ', img: '/13.jpeg' },
-    { id: 'g-4', title: 'ເຕັ້ນໂຄງສ້າງ Marquee White VIP', img: '/44.jpeg' },
-    { id: 'g-5', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Golden VIP', img: '/45.jpeg' },
-    { id: 'g-6', title: 'ງານປະດັບໄຟ ແລະ ເຕັ້ນປະດັບ', img: '/56.jpeg' },
-    { id: 'g-7', title: 'ຊຸດໂຕະຕັ່ງ Tiffany Classic', img: '/656.jpeg' },
-    { id: 'g-8', title: 'ດອກໄຟແຊນເດີເລຍ', img: '/656565.jpeg' },
+    { id: 'g-1', title: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Golden ງານປະຊຸມ' : 'Tiffany Golden Conference Set', img: '/11.jpeg' },
+    { id: 'g-2', title: lang === 'la' ? 'ເຕັ້ນປະດັບ Decorative Marquee VIP' : 'Decorative Marquee VIP Setup', img: '/12.jpeg' },
+    { id: 'g-3', title: lang === 'la' ? 'ບັນຍາກາດການຈັດງານດອງ' : 'Wedding Ceremony Atmosphere', img: '/13.jpeg' },
+    { id: 'g-4', title: lang === 'la' ? 'ເຕັ້ນໂຄງສ້າງ Marquee White VIP' : 'White Marquee Structure Tent', img: '/44.jpeg' },
+    { id: 'g-5', title: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Golden VIP' : 'Tiffany Golden VIP Dining Set', img: '/45.jpeg' },
+    { id: 'g-6', title: lang === 'la' ? 'ງານປະດັບໄຟ ແລະ ເຕັ້ນປະດັບ' : 'Lighting Decor & Event Tent', img: '/56.jpeg' },
+    { id: 'g-7', title: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Classic' : 'Tiffany Classic Chair Setup', img: '/656.jpeg' },
+    { id: 'g-8', title: lang === 'la' ? 'ດອກໄຟແຊນເດີເລຍ' : 'Luxury Chandelier Lighting', img: '/656565.jpeg' },
   ];
 
   const scrollToQuotation = () => {
@@ -114,7 +198,7 @@ export default function ClientHomePage() {
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
     if (bookedDates.includes(selected)) {
-      alert(`⚠️ ວັນທີ ${selected} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.`);
+      alert(lang === 'la' ? `⚠️ ວັນທີ ${selected} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.` : `⚠️ Date ${selected} is fully booked! Please select another date.`);
       setStartDate('');
       return;
     }
@@ -129,23 +213,23 @@ export default function ClientHomePage() {
     e.preventDefault();
 
     if (!customerName.trim()) {
-      return alert('ກະລຸນາປ້ອນຊື່ລູກຄ້າ / ບໍລິສັດ');
+      return alert(lang === 'la' ? 'ກະລຸນາປ້ອນຊື່ລູກຄ້າ / ບໍລິສັດ' : 'Please enter customer name');
     }
 
     if (!phone || phone.length < 10) {
-      return alert('ກະລຸນາປ້ອນເບີໂທໃຫ້ຖືກຕ້ອງ (ຕົວຢ່າງ: 02051702676)');
+      return alert(lang === 'la' ? 'ກະລຸນາປ້ອນເບີໂທໃຫ້ຖືກຕ້ອງ (ຕົວຢ່າງ: 02051702676)' : 'Please enter a valid phone number');
     }
 
     if (!startDate) {
-      return alert('ກະລຸນາເລືອກວັນທີເລີ່ມເຊົ່າ');
+      return alert(lang === 'la' ? 'ກະລຸນາເລືອກວັນທີເລີ່ມເຊົ່າ' : 'Please select start date');
     }
 
     if (bookedDates.includes(startDate)) {
-      return alert(`⚠️ ວັນທີ ${startDate} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.`);
+      return alert(lang === 'la' ? `⚠️ ວັນທີ ${startDate} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.` : `⚠️ Date ${startDate} is fully booked!`);
     }
 
     if (cartTotalItems === 0) {
-      return alert('ກະລຸນາເລືອກອຸປະກອນຢ່າງນ້ອຍ 1 ລາຍການ');
+      return alert(lang === 'la' ? 'ກະລຸນາເລືອກອຸປະກອນຢ່າງນ້ອຍ 1 ລາຍການ' : 'Please select at least 1 item');
     }
 
     setIsSubmitting(true);
@@ -171,7 +255,7 @@ export default function ClientHomePage() {
 
       if (error) {
         console.error('Supabase Insert Error:', error);
-        alert(`❌ ບໍ່ສາມາດບັນທຶກຂໍ້ມູນລົງ Database ໄດ້: ${error.message}`);
+        alert(`❌ Error saving to Database: ${error.message}`);
         setIsSubmitting(false);
         return;
       }
@@ -192,7 +276,7 @@ export default function ClientHomePage() {
 
     } catch (err: any) {
       console.error('Unexpected Error:', err);
-      alert('❌ ເກີດຂໍ້ຜິດພາດໃນການເຊື່ອມຕໍ່ລະບົບ');
+      alert('❌ System connection error');
     } finally {
       setIsSubmitting(false);
     }
@@ -212,8 +296,8 @@ export default function ClientHomePage() {
             />
           </div>
           <div>
-            <h1 className="font-extrabold text-[#C6936A] text-base leading-none">ກະຕູບສ໌ ບໍລິການ</h1>
-            <p className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5">KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ</p>
+            <h1 className="font-extrabold text-[#C6936A] text-base leading-none">{t.siteTitle}</h1>
+            <p className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5">{t.siteSubtitle}</p>
           </div>
         </div>
 
@@ -222,21 +306,21 @@ export default function ClientHomePage() {
             onClick={scrollToQuotation}
             className="bg-[#8C5345] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
           >
-            <span>🛒 ຕະກ້າ ({cartTotalItems})</span>
+            <span>🛒 {t.cart} ({cartTotalItems})</span>
           </button>
 
           <button
             onClick={scrollToQuotation}
             className="bg-[#C6936A] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition"
           >
-            <span>📄 ໃບສະເໜີລາຄາ</span>
+            <span>📄 {t.quotationBtn}</span>
           </button>
 
           <button
             onClick={() => setLang(lang === 'la' ? 'en' : 'la')}
-            className="text-xs border border-[#C6936A] text-[#C6936A] font-bold px-2.5 py-1 rounded-full hover:bg-[#FAF3F0]"
+            className="text-xs border border-[#C6936A] bg-[#FAF3F0] text-[#C6936A] font-extrabold px-3 py-1 rounded-full hover:bg-white transition"
           >
-            🌐 {lang.toUpperCase()}
+            🌐 {lang === 'la' ? 'EN' : 'LA'}
           </button>
         </div>
       </header>
@@ -254,14 +338,14 @@ export default function ClientHomePage() {
           </div>
           <div className="inline-block">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
-              KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)
+              {t.heroTag}
             </span>
           </div>
           <h2 className="text-2xl md:text-4xl font-extrabold text-[#3D2B27]">
-            ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ <span className="text-[#C6936A]">ກະຕູບສ໌ ບໍລິການ</span>
+            {t.heroTitle} <span className="text-[#C6936A]">{t.siteTitle}</span>
           </h2>
           <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto">
-            ຍົກລະດັບງານລ້ຽງຂອງທ່ານດ້ວຍເຕັ້ນ Marquee ຫຍູ້ຫລາ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ແລະ ອຸປະກອນຈັດງານລ້ຽງຄົບວົງຈອນ.
+            {t.heroDesc}
           </p>
         </div>
 
@@ -270,12 +354,12 @@ export default function ClientHomePage() {
           <div className="flex items-center justify-between border-b border-[#E8D0C8] pb-2">
             <div>
               <h3 className="text-lg md:text-xl font-black text-[#A36B5E] flex items-center gap-2">
-                <span>✨</span> ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ກະຕູບສ໌ ບໍລິການ
+                <span>✨</span> {t.galleryTitle}
               </h3>
-              <p className="text-xs text-gray-400 font-bold">ຕົວຢ່າງງານຕິດຕັ້ງເຕັ້ນ VIP, ຊຸດໂຕະຕັ່ງ ແລະ ການປະດັບປະດາ</p>
+              <p className="text-xs text-gray-400 font-bold">{t.gallerySubtitle}</p>
             </div>
             <span className="text-xs font-bold text-[#C6936A] bg-white px-3 py-1 rounded-full border border-[#E8D0C8]">
-              {galleryImages.length} ຜົນງານ
+              {galleryImages.length} {t.works}
             </span>
           </div>
 
@@ -303,8 +387,8 @@ export default function ClientHomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             <div className="border-b border-[#E8D0C8] pb-2">
-              <h3 className="text-lg font-black text-[#8C5345]">🎪 ເລືອກອຸປະກອນເຊົ່າ</h3>
-              <p className="text-xs text-gray-400 font-bold">ຄລິກເພີ່ມອຸປະກອນເຂົ້າໃນຕະກ້າເພື່ອຄິດໄລ່ຄ່າເຊົ່າ</p>
+              <h3 className="text-lg font-black text-[#8C5345]">🎪 {t.selectEquipment}</h3>
+              <p className="text-xs text-gray-400 font-bold">{t.selectDesc}</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -324,7 +408,7 @@ export default function ClientHomePage() {
                       </div>
                       <div>
                         <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
-                        <p className="text-sm font-extrabold text-[#8C5345] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">/ຊຸດ/ມື້</span></p>
+                        <p className="text-sm font-extrabold text-[#8C5345] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">{t.perDay}</span></p>
                       </div>
                     </div>
 
@@ -334,7 +418,7 @@ export default function ClientHomePage() {
                           onClick={() => addToCart(item.id)}
                           className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition"
                         >
-                          + ເພີ່ມເຂົ້າໃນຕະກ້າ
+                          {t.addToCart}
                         </button>
                       ) : (
                         <div className="flex items-center justify-between bg-[#FAF3F0] rounded-xl p-1 border border-[#E8D0C8]">
@@ -353,36 +437,36 @@ export default function ClientHomePage() {
           {/* 📝 ຟອມອອກໃບສະເໜີລາຄາ */}
           <div id="quotation-form" className="bg-white p-6 rounded-3xl border-2 border-[#C6936A] shadow-md h-fit space-y-5 scroll-mt-24">
             <div>
-              <h3 className="font-extrabold text-[#8C5345] text-base">📝 ຟອມອອກໃບສະເໜີລາຄາ / ຈອງອຸປະກອນ</h3>
-              <p className="text-xs text-gray-400 font-bold mt-0.5">ເລືອກອຸປະກອນແລ້ວປ້ອນຂໍ້ມູນເພື່ອອອກໃບສະເໜີລາຄາ</p>
+              <h3 className="font-extrabold text-[#8C5345] text-base">{t.quotationFormTitle}</h3>
+              <p className="text-xs text-gray-400 font-bold mt-0.5">{t.quotationFormDesc}</p>
             </div>
 
             <div className="space-y-2 border-y border-[#E8D0C8] py-3 text-xs">
               <div className="flex justify-between font-bold text-gray-500">
-                <span>ຈຳນວນອຸປະກອນ:</span>
-                <span className="text-[#8C5345]">{cartTotalItems} ລາຍການ</span>
+                <span>{t.totalItems}</span>
+                <span className="text-[#8C5345]">{cartTotalItems} {t.itemsCount}</span>
               </div>
               <div className="flex justify-between font-bold text-gray-500">
-                <span>ລວມຄ່າເຊົ່າທັງໝົດ:</span>
+                <span>{t.totalRent}</span>
                 <span className="text-base font-black text-[#3D2B27]">{totalAmount.toLocaleString()} LAK</span>
               </div>
               <div className="flex justify-between font-bold text-gray-500">
-                <span>ມັດຈຳ (30%):</span>
+                <span>{t.deposit30}</span>
                 <span className="text-[#8C5345]">{deposit30.toLocaleString()} LAK</span>
               </div>
               <div className="flex justify-between font-bold text-gray-500 pt-1 border-t border-dashed">
-                <span>ຈ່າຍມື້ຮັບເຄື່ອງ (70%):</span>
+                <span>{t.balance70}</span>
                 <span className="text-[#C6936A] font-extrabold">{balance70.toLocaleString()} LAK</span>
               </div>
             </div>
 
             <form onSubmit={handleCreateQuotation} className="space-y-3">
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ຊື່ລູກຄ້າ / ບໍລິສັດ *</label>
+                <label className="text-[11px] font-bold text-gray-600 block mb-1">{t.customerNameLabel}</label>
                 <input
                   type="text"
                   required
-                  placeholder="ປ້ອນຊື່ ແລະ ນາມສະກຸນ"
+                  placeholder={t.customerNamePlaceholder}
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]"
@@ -390,7 +474,7 @@ export default function ClientHomePage() {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ເບີໂທຕິດຕໍ່ (WhatsApp) * (ສູງສຸດ 11 ຕົວ)</label>
+                <label className="text-[11px] font-bold text-gray-600 block mb-1">{t.phoneLabel}</label>
                 <input
                   type="text"
                   required
@@ -404,7 +488,7 @@ export default function ClientHomePage() {
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">ວັນທີເລີ່ມເຊົ່າ *</label>
+                  <label className="text-[10px] font-bold text-gray-600 block mb-1">{t.startDateLabel}</label>
                   <input
                     type="date"
                     required
@@ -415,7 +499,7 @@ export default function ClientHomePage() {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">ວັນທີສົ່ງເຄື່ອງ</label>
+                  <label className="text-[10px] font-bold text-gray-600 block mb-1">{t.endDateLabel}</label>
                   <input
                     type="date"
                     value={endDate}
@@ -427,7 +511,7 @@ export default function ClientHomePage() {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">ສະຖານທີ່ຈັດງານ</label>
+                <label className="text-[11px] font-bold text-gray-600 block mb-1">{t.locationLabel}</label>
                 <input
                   type="text"
                   value={location}
@@ -441,7 +525,7 @@ export default function ClientHomePage() {
                 disabled={isSubmitting}
                 className="w-full bg-[#8C5345] text-white font-bold py-3 rounded-2xl text-xs hover:opacity-90 transition shadow-md mt-2 flex items-center justify-center gap-1.5 disabled:bg-gray-400"
               >
-                <span>{isSubmitting ? '⏳ ກຳລັງບັນທຶກ...' : '✨ ຢືນຢັນການຈອງ / ອອກໃບສະເໜີລາຄາ'}</span>
+                <span>{isSubmitting ? t.submittingBtn : t.submitBtn}</span>
               </button>
             </form>
           </div>
@@ -453,7 +537,7 @@ export default function ClientHomePage() {
         onClick={scrollToQuotation}
         className="fixed bottom-6 right-4 bg-[#8C5345] text-white px-4 py-3 rounded-full shadow-2xl font-bold text-xs flex items-center gap-2 z-50 hover:scale-105 transition active:scale-95 md:hidden border-2 border-white"
       >
-        <span>📝 ໄປຫາໃບສະເໜີລາຄາ</span>
+        <span>{t.floatingBtn}</span>
         {cartTotalItems > 0 && (
           <span className="bg-amber-400 text-black w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-black">
             {cartTotalItems}
@@ -467,28 +551,28 @@ export default function ClientHomePage() {
           <div className="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-[#E8D0C8]">
             <div className="text-center space-y-1">
               <span className="text-2xl">🎉</span>
-              <h3 className="text-lg font-black text-[#8C5345]">ໃບສະເໜີລາຄາສຳເລັດ!</h3>
-              <p className="text-xs text-gray-400">ໝາຍເລກອໍເດີ: <span className="font-bold text-[#C6936A]">{showInvoiceModal.orderNo}</span></p>
+              <h3 className="text-lg font-black text-[#8C5345]">{t.modalTitle}</h3>
+              <p className="text-xs text-gray-400">{t.orderNoLabel} <span className="font-bold text-[#C6936A]">{showInvoiceModal.orderNo}</span></p>
             </div>
 
             <div className="bg-[#FAF3F0] p-4 rounded-2xl space-y-2 text-xs border border-[#E8D0C8]">
-              <div className="flex justify-between"><span>ຊື່ລູກຄ້າ:</span><b>{showInvoiceModal.customerName}</b></div>
-              <div className="flex justify-between"><span>ເບີໂທ:</span><b>{showInvoiceModal.phone}</b></div>
-              <div className="flex justify-between"><span>ວັນທີຈັດງານ:</span><b>{showInvoiceModal.eventDate}</b></div>
-              <div className="flex justify-between border-t border-[#E8D0C8] pt-2 text-[#8C5345]"><span>ມັດຈຳ (30%):</span><b>{showInvoiceModal.deposit30.toLocaleString()} LAK</b></div>
+              <div className="flex justify-between"><span>{t.customerLabel}</span><b>{showInvoiceModal.customerName}</b></div>
+              <div className="flex justify-between"><span>{t.phoneModalLabel}</span><b>{showInvoiceModal.phone}</b></div>
+              <div className="flex justify-between"><span>{t.eventDateLabel}</span><b>{showInvoiceModal.eventDate}</b></div>
+              <div className="flex justify-between border-t border-[#E8D0C8] pt-2 text-[#8C5345]"><span>{t.deposit30}</span><b>{showInvoiceModal.deposit30.toLocaleString()} LAK</b></div>
             </div>
 
             <a
-              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Katoups Service Order: ${showInvoiceModal.orderNo}\nລູກຄ້າ: ${showInvoiceModal.customerName}\nເບີໂທ: ${showInvoiceModal.phone}\nວັນທີ: ${showInvoiceModal.eventDate}\nຍອດລວມ: ${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
+              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Katoups Service Order: ${showInvoiceModal.orderNo}\nCustomer: ${showInvoiceModal.customerName}\nPhone:${showInvoiceModal.phone}\nDate: ${showInvoiceModal.eventDate}\nTotal:${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
               target="_blank"
               rel="noreferrer"
               className="w-full block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl shadow hover:opacity-90 transition text-xs"
             >
-              📲 ສົ່ງຂໍ້ມູນເຂົ້າ WhatsApp ຮ້ານ
+              {t.sendWhatsappBtn}
             </a>
 
             <button onClick={() => setShowInvoiceModal(null)} className="w-full border border-gray-300 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-50">
-              ❌ ປິດ
+              {t.closeBtn}
             </button>
           </div>
         </div>
