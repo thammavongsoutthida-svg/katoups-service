@@ -211,10 +211,14 @@ export default function ClientHomePage() {
     setPhone(limitedPhone);
   };
 
+  // 📅 ຟັງຊັນຈັດການວັນທີເລີ່ມເຊົ່າ (ປ້ອງກັນວັນທີເຕັມຢ່າງຮັດກຸມ)
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
+    if (!selected) return;
+
     if (bookedDates.includes(selected)) {
       alert(lang === 'la' ? `⚠️ ວັນທີ ${selected} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.` : `⚠️ Date ${selected} is fully booked! Please select another date.`);
+      e.target.value = ''; // ລ້າງຄ່າໃນ input element ທັນທີ
       setStartDate('');
       return;
     }
@@ -222,6 +226,18 @@ export default function ClientHomePage() {
     if (endDate && selected > endDate) {
       setEndDate(selected);
     }
+  };
+
+  // 📅 ຟັງຊັນຈັດການວັນທີສົ່ງເຄື່ອງ (ກວດເຊັກເລີ່ມເຊົ່າກ່ອນ)
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.value;
+    if (!startDate) {
+      alert(lang === 'la' ? 'ກະລຸນາເລືອກວັນທີເລີ່ມເຊົ່າກ່ອນ' : 'Please select start date first');
+      e.target.value = '';
+      setEndDate('');
+      return;
+    }
+    setEndDate(selected);
   };
 
   // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database ຫາ Admin 100%
@@ -251,8 +267,8 @@ export default function ClientHomePage() {
     setIsSubmitting(true);
     const orderNo = `QUO-${Math.floor(10000 + Math.random() * 90000)}`;
 
-   const newOrder = {
-      id: Date.now().toString(), // 👈 ວາງໃສ່ຢູ່ບັນທັດນີ້ (ທາງເທິງ order_no)
+    const newOrder = {
+      id: Date.now().toString(), // 👈 ວາງ id ເພື່ອປ້ອງກັນ not-null constraint error ຈາກ Supabase
       order_no: orderNo,
       customer_name: customerName,
       phone: phone,
@@ -485,7 +501,7 @@ export default function ClientHomePage() {
                     type="date"
                     value={endDate}
                     min={startDate || todayMin}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={handleEndDateChange}
                     className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
                   />
                 </div>
