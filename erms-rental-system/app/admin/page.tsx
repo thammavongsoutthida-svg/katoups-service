@@ -24,12 +24,6 @@ const monthlyRevenueData = [
   { month: 'ມິ.ຖ', revenue: 11000000, deposit: 3300000 },
 ];
 
-const orderStatusData = [
-  { name: 'ສຳເລັດແລ້ວ', value: 0, color: '#10B981' },
-  { name: 'ກຳລັງດຳເນີນການ', value: 0, color: '#F59E0B' },
-  { name: 'ຍົກເລີກ', value: 0, color: '#EF4444' },
-];
-
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'orders' | 'stock' | 'payroll' | 'finance' | 'balanceSheet' | 'cashScan' | 'dashboard'>('dashboard');
@@ -362,6 +356,17 @@ export default function AdminDashboardPage() {
   const totalRevenue = filteredOrders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
   const totalDeposit = filteredOrders.reduce((sum, o) => sum + (Number(o.deposit) || 0), 0);
   const totalBalanceDue = filteredOrders.reduce((sum, o) => sum + (Number(o.balance) || 0), 0);
+
+  // 📊 ໄລ່ຈຳນວນອໍເດີ້ຕາມສະຖານະຈາກ Database ແທ້
+  const completedOrdersCount = orders.filter((o) => o.status === 'COMPLETED').length;
+  const pendingOrdersCount = orders.filter((o) => o.status === 'PENDING' || o.status === 'CONFIRMED' || !o.status).length;
+  const cancelledOrdersCount = orders.filter((o) => o.status === 'CANCELLED').length;
+
+  const dynamicOrderStatusData = [
+    { name: 'ສຳເລັດແລ້ວ', value: completedOrdersCount, color: '#10B981' },
+    { name: 'ກຳລັງດຳເນີນການ', value: pendingOrdersCount, color: '#F59E0B' },
+    { name: 'ຍົກເລີກ', value: cancelledOrdersCount, color: '#EF4444' },
+  ];
 
   const totalStaffPayroll = staffList.reduce((sum, s) => {
     const absentDays = Object.values(s.attendance || {}).filter((status) => status === 'absent').length;
@@ -986,8 +991,8 @@ export default function AdminDashboardPage() {
                   <div className="h-[200px] w-full relative flex items-center justify-center">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
-                        <Pie data={orderStatusData} innerRadius={55} outerRadius={80} paddingAngle={5} dataKey="value">
-                          {orderStatusData.map((entry, index) => (
+                        <Pie data={dynamicOrderStatusData} innerRadius={55} outerRadius={80} paddingAngle={5} dataKey="value">
+                          {dynamicOrderStatusData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
@@ -1002,7 +1007,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div className="space-y-2 pt-2 border-t border-gray-100 mt-2">
-                  {orderStatusData.map((item, i) => (
+                  {dynamicOrderStatusData.map((item, i) => (
                     <div key={i} className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
