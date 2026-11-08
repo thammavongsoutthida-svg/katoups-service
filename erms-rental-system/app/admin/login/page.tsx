@@ -11,7 +11,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setErrorMsg('');
 
-    // 🔑 ກວດສອບ Passcode (ສາມາດຕັ້ງລະຫັດຜ່ານຢູ່ບ່ອນນີ້)
+    // 🔑 ກວດສອບ Passcode (ຮັກສາ logic ເກົ່າໄວ້ 100%)
     if (password === 'katoups2026' || password === '123456' || password === 'admin') {
       
       // 1. ເພີ່ມ Cookie ສຳລັບ Middleware
@@ -29,45 +29,47 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF3F0] flex items-center justify-center p-4 font-['Noto_Sans_Lao',sans-serif]">
-      <div className="bg-white rounded-3xl p-8 max-w-md w-full border border-[#E8D0C8] shadow-xl text-center space-y-6">
-        <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-[#A36B5E] bg-[#F8ECE9] flex items-center justify-center shadow-sm">
-          <img src="/logo.png" alt="Katoups Service" className="w-full h-full object-cover scale-110" />
+    <div className="min-h-screen bg-[#F1EBDD] flex items-center justify-center p-4 font-['Noto_Sans_Lao',sans-serif] text-[#292A25]">
+      <div className="bg-white rounded-3xl p-8 max-w-md w-full border border-[#B49A70]/30 shadow-xl text-center space-y-6">
+        
+        {/* 🖼️ ປັບໂລໂກ້ໃຫ້ສົມສ່ວນ ບໍ່ໃຫ້ຕັດ ແລະ ເດັ່ນງາມ */}
+        <div className="w-36 h-24 mx-auto flex items-center justify-center p-1">
+          <img src="/logo.png" alt="Mongkhon Company Sole Co., Ltd" className="w-full h-full object-contain" />
         </div>
 
         <div>
-          <h1 className="text-2xl font-black text-[#8C5345] tracking-wide">KATOUPS ADMIN LOGIN</h1>
-          <p className="text-xs text-gray-400 font-bold mt-1">ລະບົບຫຼັງບ້ານສຳລັບຜູ້ດູແລ ກະຕູບສ໌ ບໍລິການ</p>
+          <h1 className="text-2xl font-black text-[#292A25] tracking-wide">MONGKHON ADMIN LOGIN</h1>
+          <p className="text-xs text-[#B49A70] font-bold mt-1">ລະບົບຫຼັງບ້ານສຳລັບຜູ້ດູແລ ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ</p>
         </div>
 
         {errorMsg && (
-          <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-bold py-2 rounded-xl">
+          <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-bold py-2.5 rounded-xl">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="text-left">
-            <label className="text-xs font-bold text-gray-600 block mb-1">Passcode ເຂົ້າສູ່ລະບົບ Admin</label>
+            <label className="text-xs font-bold text-[#292A25] block mb-1">Passcode ເຂົ້າສູ່ລະບົບ Admin</label>
             <input
               type="password"
               required
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8C5345]"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#B49A70]"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-[#A36B5E] to-[#8C5345] text-white font-bold py-3.5 rounded-xl shadow-md hover:opacity-95 transition text-sm flex items-center justify-center gap-2"
+            className="w-full bg-[#B49A70] hover:bg-[#292A25] text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2"
           >
             🔒 ເຂົ້າສູ່ລະບົບ Admin
           </button>
         </form>
 
-        <a href="/" className="block text-xs font-bold text-[#8C5345] hover:underline">
+        <a href="/" className="block text-xs font-bold text-[#687568] hover:text-[#292A25] hover:underline transition">
           ← ກັບໄປໜ້າລູກຄ້າ
         </a>
       </div>
