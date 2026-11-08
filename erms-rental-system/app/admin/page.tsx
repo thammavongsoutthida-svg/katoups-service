@@ -357,15 +357,14 @@ export default function AdminDashboardPage() {
   const totalDeposit = filteredOrders.reduce((sum, o) => sum + (Number(o.deposit) || 0), 0);
   const totalBalanceDue = filteredOrders.reduce((sum, o) => sum + (Number(o.balance) || 0), 0);
 
-  // 📊 ໄລ່ຈຳນວນອໍເດີ້ຕາມສະຖານະຈາກ Database ແທ້
   const completedOrdersCount = orders.filter((o) => o.status === 'COMPLETED').length;
   const pendingOrdersCount = orders.filter((o) => o.status === 'PENDING' || o.status === 'CONFIRMED' || !o.status).length;
   const cancelledOrdersCount = orders.filter((o) => o.status === 'CANCELLED').length;
 
   const dynamicOrderStatusData = [
-    { name: 'ສຳເລັດແລ້ວ', value: completedOrdersCount, color: '#10B981' },
-    { name: 'ກຳລັງດຳເນີນການ', value: pendingOrdersCount, color: '#F59E0B' },
-    { name: 'ຍົກເລີກ', value: cancelledOrdersCount, color: '#EF4444' },
+    { name: 'ສຳເລັດແລ້ວ', value: completedOrdersCount, color: '#687568' },
+    { name: 'ກຳລັງດຳເນີນການ', value: pendingOrdersCount, color: '#B49A70' },
+    { name: 'ຍົກເລີກ', value: '#EF4444' },
   ];
 
   const totalStaffPayroll = staffList.reduce((sum, s) => {
@@ -391,48 +390,53 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF3F0] flex font-['Noto_Sans_Lao',sans-serif]">
-      {/* 👑 Sidebar Navigation */}
-      <aside className="w-64 bg-white border-r border-[#E8D0C8] p-6 flex flex-col justify-between shadow-sm">
+    <div className="min-h-screen bg-[#F1EBDD] flex font-['Noto_Sans_Lao',sans-serif] text-[#292A25]">
+      {/* 👑 Sidebar Navigation with Luxury Theme & Clear MONGKHON Logo */}
+      <aside className="w-64 bg-white border-r border-[#B49A70]/30 p-6 flex flex-col justify-between shadow-sm">
         <div className="space-y-6">
-          <div>
-            <h1 className="font-extrabold text-[#C6936A] text-xl tracking-wider">KATOUPS</h1>
-            <p className="text-[11px] text-[#A36B5E] font-bold uppercase tracking-widest mt-0.5">ADMIN PANEL</p>
+          <div className="text-center space-y-2">
+            <div className="w-36 h-20 mx-auto relative overflow-hidden flex items-center justify-center">
+              <img src="/logo.png" alt="Mongkhon Logo" className="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h1 className="font-extrabold text-[#292A25] text-sm tracking-tight">MONGKHON SOLE CO., LTD</h1>
+              <p className="text-[10px] text-[#B49A70] font-bold uppercase tracking-widest mt-0.5">ADMIN PANEL</p>
+            </div>
           </div>
 
           <nav className="space-y-2">
-            <button onClick={() => setActiveTab('orders')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'orders' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('orders')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'orders' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>📋</span><span>ຈັດການອໍເດີ (Full CRUD)</span>
             </button>
 
-            <button onClick={() => setActiveTab('stock')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'stock' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('stock')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'stock' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>🎪</span><span>ຄັງອຸປະກອນ (Full CRUD)</span>
             </button>
 
-            <button onClick={() => setActiveTab('payroll')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'payroll' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('payroll')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'payroll' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>💳</span><span>ພະນັກງານ & ປະຕິທິນເຊັກຊື່</span>
             </button>
 
-            <button onClick={() => setActiveTab('finance')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'finance' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('finance')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'finance' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>📊</span><span>ບັນຊີ ປະຈຳວັນ/ເດືອນ/ປີ</span>
             </button>
 
-            <button onClick={() => setActiveTab('balanceSheet')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'balanceSheet' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('balanceSheet')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'balanceSheet' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>🏛️</span><span>ໃບຊັບສິນ & ໜີ້ສິນ (Editable)</span>
             </button>
 
-            <button onClick={() => setActiveTab('cashScan')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'cashScan' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('cashScan')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'cashScan' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>📸</span><span>ໃບສະແກນເງິນສົດ</span>
             </button>
 
-            <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'dashboard' ? 'bg-gradient-to-r from-[#C6936A] to-[#A36B5E] text-white shadow-md' : 'text-gray-600 hover:bg-[#FAF3F0]'}`}>
+            <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-3 rounded-2xl font-bold text-xs transition flex items-center gap-2 ${activeTab === 'dashboard' ? 'bg-[#B49A70] text-white shadow-md' : 'text-[#292A25] hover:bg-[#F1EBDD]'}`}>
               <span>📈</span><span>ແຜງຄວບຄຸມ (Dashboard)</span>
             </button>
           </nav>
         </div>
 
         <div className="space-y-3">
-          <a href="/" className="block text-center border border-[#C6936A] text-[#C6936A] text-xs font-bold py-2.5 rounded-full hover:bg-[#FAF3F0] transition">
+          <a href="/" className="block text-center border border-[#B49A70] text-[#292A25] text-xs font-bold py-2.5 rounded-full hover:bg-white transition">
             🌐 ເບິ່ງໜ້າລູກຄ້າ
           </a>
           <button onClick={handleLogout} className="w-full text-center bg-red-50 text-red-600 text-xs font-bold py-2.5 rounded-full hover:bg-red-100 transition">
@@ -441,11 +445,11 @@ export default function AdminDashboardPage() {
         </div>
       </aside>
 
-      {/* 🔮 Main Content */}
+      {/* 🔮 Main Content Area */}
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-black text-[#3D2B27]">
+            <h1 className="text-3xl font-black text-[#292A25]">
               {activeTab === 'orders' && '📋 ຈັດການອໍເດີ້ລູກຄ້າ (Full CRUD)'}
               {activeTab === 'stock' && '🎪 ຈັດການຄັງອຸປະກອນເຊົ່າ (17 ລາຍການ)'}
               {activeTab === 'payroll' && '💳 ຈັດການພະນັກງານ, ເງິນເດືອນ & ຕາຕະລາງປະຕິທິນເຊັກຊື່'}
@@ -454,10 +458,10 @@ export default function AdminDashboardPage() {
               {activeTab === 'cashScan' && '📸 ໃບສະແກນເງິນສົດ & ໃບບິນ'}
               {activeTab === 'dashboard' && '📈 ພາບລວມລະບົບ (Overview)'}
             </h1>
-            <p className="text-xs text-gray-400 font-bold mt-1">Katoups Service Cloud Database Active</p>
+            <p className="text-xs text-[#687568] font-bold mt-1">Mongkhon Company Sole Co., Ltd Cloud Database Active</p>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={fetchOrders} className="bg-white border border-[#E8D0C8] px-4 py-2 rounded-full text-xs font-bold text-[#8C5345] shadow-sm hover:bg-[#FAF3F0]">
+            <button onClick={fetchOrders} className="bg-white border border-[#B49A70]/30 px-4 py-2 rounded-full text-xs font-bold text-[#292A25] shadow-sm hover:bg-[#F1EBDD]">
               🔄 ດຶງຂໍ້ມູນໃໝ່ (Refresh)
             </button>
             <span className="bg-emerald-50 border border-emerald-200 px-5 py-2 rounded-full text-xs font-bold text-emerald-700 shadow-sm">
@@ -469,17 +473,17 @@ export default function AdminDashboardPage() {
         {/* 1️⃣ ORDERS TAB */}
         {activeTab === 'orders' && (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
-              <h3 className="font-bold text-[#3D2B27] mb-4">
+            <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
+              <h3 className="font-bold text-[#292A25] mb-4">
                 {editingOrderId ? '✏️ ແກ້ໄຂຂໍ້ມູນອໍເດີ້' : '➕ ເພີ່ມອໍເດີ້ / ໃບສະເໜີລາຄາໃໝ່'}
               </h3>
               <form onSubmit={handleSaveOrder} className="grid grid-cols-1 md:grid-cols-5 gap-3">
-                <input type="text" required placeholder="ຊື່ລູກຄ້າ *" value={orderCustomer} onChange={(e) => setOrderCustomer(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="text" required placeholder="ເບີໂທ WhatsApp *" value={orderPhone} onChange={(e) => setOrderPhone(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="text" placeholder="ວັນທີຈັດງານ (yyyy-mm-dd)" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" required placeholder="ຄ່າເຊົ່າລວມ (LAK) *" value={orderTotal} onChange={(e) => setOrderTotal(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
+                <input type="text" required placeholder="ຊື່ລູກຄ້າ *" value={orderCustomer} onChange={(e) => setOrderCustomer(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="text" required placeholder="ເບີໂທ WhatsApp *" value={orderPhone} onChange={(e) => setOrderPhone(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="text" placeholder="ວັນທີຈັດງານ (yyyy-mm-dd)" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" required placeholder="ຄ່າເຊົ່າລວມ (LAK) *" value={orderTotal} onChange={(e) => setOrderTotal(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
                 <div className="flex gap-2">
-                  <button type="submit" className="flex-1 bg-[#8C5345] text-white font-bold py-2 rounded-xl hover:opacity-90 transition text-sm">
+                  <button type="submit" className="flex-1 bg-[#B49A70] text-white font-bold py-2 rounded-xl hover:bg-[#292A25] transition text-sm">
                     {editingOrderId ? '💾 ບັນທຶກແກ້ໄຂ' : '➕ ເພີ່ມອໍເດີ້'}
                   </button>
                   {editingOrderId && (
@@ -489,14 +493,14 @@ export default function AdminDashboardPage() {
               </form>
             </div>
 
-            <div className="bg-white rounded-3xl border border-[#E8D0C8] shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-[#E8D0C8] flex justify-between items-center">
-                <h3 className="font-bold text-[#3D2B27]">ລາຍການອໍເດີ້ທັງໝົດ</h3>
+            <div className="bg-white rounded-3xl border border-[#B49A70]/30 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-[#B49A70]/30 flex justify-between items-center">
+                <h3 className="font-bold text-[#292A25]">ລາຍການອໍເດີ້ທັງໝົດ</h3>
                 <span className="text-xs text-gray-400 font-bold">ທັງໝົດ {orders.length} ອໍເດີ</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-[#FAF3F0] text-[#8C5345] font-bold text-xs uppercase border-b border-[#E8D0C8]">
+                  <thead className="bg-[#F1EBDD] text-[#292A25] font-bold text-xs uppercase border-b border-[#B49A70]/30">
                     <tr>
                       <th className="p-4">ເລກອໍເດີ</th>
                       <th className="p-4">ລູກຄ້າ / ເບີໂທ</th>
@@ -507,21 +511,21 @@ export default function AdminDashboardPage() {
                       <th className="p-4 text-center">ຈັດການ (EDIT / DELETE)</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8D0C8]">
+                  <tbody className="divide-y divide-[#F1EBDD]">
                     {loading ? (
                       <tr><td colSpan={7} className="text-center py-12 text-gray-400 font-medium">ກຳລັງດຶງຂໍ້ມູນ...</td></tr>
                     ) : orders.length === 0 ? (
                       <tr><td colSpan={7} className="text-center py-12 text-gray-400 font-medium">ຍັງບໍ່ທັນມີຂໍ້ມູນອໍເດີ້</td></tr>
                     ) : (
                       orders.map((o) => (
-                        <tr key={o.id} className="hover:bg-[#FAF3F0]/50 transition">
-                          <td className="p-4 font-extrabold text-[#8C5345]">{o.orderNo}</td>
-                          <td className="p-4"><div className="font-bold text-[#3D2B27]">{o.customerName}</div><div className="text-xs text-gray-400">{o.phone}</div></td>
+                        <tr key={o.id} className="hover:bg-[#F1EBDD]/50 transition">
+                          <td className="p-4 font-extrabold text-[#B49A70]">{o.orderNo}</td>
+                          <td className="p-4"><div className="font-bold text-[#292A25]">{o.customerName}</div><div className="text-xs text-gray-400">{o.phone}</div></td>
                           <td className="p-4 font-medium">{o.eventDate}</td>
                           <td className="p-4 font-bold">{Number(o.totalAmount).toLocaleString()} LAK</td>
-                          <td className="p-4 font-bold text-[#8C5345]">{Number(o.deposit).toLocaleString()} LAK</td>
+                          <td className="p-4 font-bold text-[#B49A70]">{Number(o.deposit).toLocaleString()} LAK</td>
                           <td className="p-4">
-                            <select value={o.status || 'PENDING'} onChange={(e) => updateOrderStatus(o.id, e.target.value)} className="bg-[#FAF3F0] border border-[#E8D0C8] text-xs font-bold rounded-xl px-2 py-1.5 focus:outline-none">
+                            <select value={o.status || 'PENDING'} onChange={(e) => updateOrderStatus(o.id, e.target.value)} className="bg-[#F1EBDD] border border-[#B49A70]/30 text-xs font-bold rounded-xl px-2 py-1.5 focus:outline-none">
                               <option value="PENDING">⏳ ຖໍາມັດຈໍາ</option>
                               <option value="CONFIRMED">✅ ມັດຈໍາແລ້ວ</option>
                               <option value="COMPLETED">🎉 ສຳເລັດງານ</option>
@@ -545,9 +549,9 @@ export default function AdminDashboardPage() {
         {/* 2️⃣ STOCK TAB */}
         {activeTab === 'stock' && (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+            <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-[#3D2B27]">
+                <h3 className="font-bold text-[#292A25]">
                   {editingEqId ? '✏️ ແກ້ໄຂຂໍ້ມູນອຸປະກອນ' : '➕ ເພີ່ມອຸປະກອນໃໝ່ເຂົ້າຄັງສະຕັອກ'}
                 </h3>
                 {editingEqId && (
@@ -558,11 +562,11 @@ export default function AdminDashboardPage() {
               </div>
 
               <form onSubmit={handleSaveEquipment} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <input type="text" required placeholder="ຊື່ອຸປະກອນ *" value={newEqName} onChange={(e) => setNewEqName(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" required placeholder="ລາຄາເຊົ່າ / ມື້ (LAK) *" value={newEqPrice} onChange={(e) => setNewEqPrice(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" required placeholder="ຈຳນວນໃນສະຕັອກ *" value={newEqTotal} onChange={(e) => setNewEqTotal(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
+                <input type="text" required placeholder="ຊື່ອຸປະກອນ *" value={newEqName} onChange={(e) => setNewEqName(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" required placeholder="ລາຄາເຊົ່າ / ມື້ (LAK) *" value={newEqPrice} onChange={(e) => setNewEqPrice(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" required placeholder="ຈຳນວນໃນສະຕັອກ *" value={newEqTotal} onChange={(e) => setNewEqTotal(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
                 <div className="flex gap-2">
-                  <button type="submit" className="flex-1 bg-[#8C5345] text-white font-bold py-2 rounded-xl hover:opacity-90 transition text-sm">
+                  <button type="submit" className="flex-1 bg-[#B49A70] text-white font-bold py-2 rounded-xl hover:bg-[#292A25] transition text-sm">
                     {editingEqId ? '💾 ບັນທຶກແກ້ໄຂ' : '➕ ເພີ່ມອຸປະກອນ'}
                   </button>
                   {editingEqId && (
@@ -572,14 +576,14 @@ export default function AdminDashboardPage() {
               </form>
             </div>
 
-            <div className="bg-white rounded-3xl border border-[#E8D0C8] shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-[#E8D0C8] flex justify-between items-center">
-                <h3 className="font-bold text-[#3D2B27]">ລາຍການອຸປະກອນ ແລະ ຈຳນວນສະຕັອກ (17 ລາຍການ)</h3>
+            <div className="bg-white rounded-3xl border border-[#B49A70]/30 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-[#B49A70]/30 flex justify-between items-center">
+                <h3 className="font-bold text-[#292A25]">ລາຍການອຸປະກອນ ແລະ ຈຳນວນສະຕັອກ (17 ລາຍການ)</h3>
                 <span className="text-xs text-gray-400 font-bold">ທັງໝົດ {stockItems.length} ລາຍການ</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-[#FAF3F0] text-[#8C5345] font-bold text-xs uppercase border-b border-[#E8D0C8]">
+                  <thead className="bg-[#F1EBDD] text-[#292A25] font-bold text-xs uppercase border-b border-[#B49A70]/30">
                     <tr>
                       <th className="p-4">ຊື່ອຸປະກອນ</th>
                       <th className="p-4">ລາຄາເຊົ່າ / ມື້</th>
@@ -588,11 +592,11 @@ export default function AdminDashboardPage() {
                       <th className="p-4 text-center">ຈັດການ (EDIT / DELETE)</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8D0C8]">
+                  <tbody className="divide-y divide-[#F1EBDD]">
                     {stockItems.map((item) => (
-                      <tr key={item.id} className="hover:bg-[#FAF3F0]/50 transition">
-                        <td className="p-4 font-bold text-[#3D2B27]">{item.name}</td>
-                        <td className="p-4 font-extrabold text-[#8C5345]">{item.price.toLocaleString()} LAK</td>
+                      <tr key={item.id} className="hover:bg-[#F1EBDD]/50 transition">
+                        <td className="p-4 font-bold text-[#292A25]">{item.name}</td>
+                        <td className="p-4 font-extrabold text-[#B49A70]">{item.price.toLocaleString()} LAK</td>
                         <td className="p-4 text-center font-bold text-base">{item.total}</td>
                         <td className="p-4 text-center font-bold text-gray-500">{item.rented}</td>
                         <td className="p-4 text-center space-x-2">
@@ -611,9 +615,9 @@ export default function AdminDashboardPage() {
         {/* 3️⃣ PAYROLL & ATTENDANCE TAB */}
         {activeTab === 'payroll' && (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+            <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-[#3D2B27]">
+                <h3 className="font-bold text-[#292A25]">
                   {editingStaffId ? '✏️ ແກ້ໄຂຂໍ້ມູນພະນັກງານ' : '➕ ເພີ່ມພະນັກງານໃໝ່'}
                 </h3>
                 {editingStaffId && (
@@ -624,14 +628,14 @@ export default function AdminDashboardPage() {
               </div>
 
               <form onSubmit={handleSaveStaff} className="grid grid-cols-1 md:grid-cols-7 gap-2">
-                <input type="text" required placeholder="ຊື່-ນາມສະກຸນ *" value={newStaffName} onChange={(e) => setNewStaffName(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]" />
-                <input type="text" required placeholder="ຕຳແໜ່ງ *" value={newStaffRole} onChange={(e) => setNewStaffRole(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" required placeholder="ເງິນເດືອນ (LAK) *" value={newStaffSalary} onChange={(e) => setNewStaffSalary(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" placeholder="ຄ່າອອກງານ/ງານ" value={newStaffAllowance} onChange={(e) => setNewStaffAllowance(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" placeholder="ງານເດືອນນີ້" value={newStaffJobs} onChange={(e) => setNewStaffJobs(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" placeholder="ຫັກຂາດວຽກ/ມື້" value={newStaffDeduction} onChange={(e) => setNewStaffDeduction(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]" />
+                <input type="text" required placeholder="ຊື່-ນາມສະກຸນ *" value={newStaffName} onChange={(e) => setNewStaffName(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]" />
+                <input type="text" required placeholder="ຕຳແໜ່ງ *" value={newStaffRole} onChange={(e) => setNewStaffRole(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" required placeholder="ເງິນເດືອນ (LAK) *" value={newStaffSalary} onChange={(e) => setNewStaffSalary(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" placeholder="ຄ່າອອກງານ/ງານ" value={newStaffAllowance} onChange={(e) => setNewStaffAllowance(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" placeholder="ງານເດືອນນີ້" value={newStaffJobs} onChange={(e) => setNewStaffJobs(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" placeholder="ຫັກຂາດວຽກ/ມື້" value={newStaffDeduction} onChange={(e) => setNewStaffDeduction(e.target.value)} className="border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]" />
                 <div className="flex gap-2">
-                  <button type="submit" className="flex-1 bg-[#8C5345] text-white font-bold py-2 rounded-xl hover:opacity-90 transition text-xs">
+                  <button type="submit" className="flex-1 bg-[#B49A70] text-white font-bold py-2 rounded-xl hover:bg-[#292A25] transition text-xs">
                     {editingStaffId ? '💾 ບັນທຶກ' : '➕ ເພີ່ມ'}
                   </button>
                   {editingStaffId && (
@@ -641,22 +645,22 @@ export default function AdminDashboardPage() {
               </form>
             </div>
 
-            {/* 📅 ATTENDANCE CALENDAR MODAL / PANEL */}
+            {/* 📅 ATTENDANCE CALENDAR MODAL */}
             {selectedStaffForAttendance && (
-              <div className="bg-white p-6 rounded-3xl border-2 border-[#8C5345] shadow-lg space-y-4">
-                <div className="flex justify-between items-center border-b border-[#E8D0C8] pb-3">
+              <div className="bg-white p-6 rounded-3xl border-2 border-[#B49A70] shadow-lg space-y-4">
+                <div className="flex justify-between items-center border-b border-[#F1EBDD] pb-3">
                   <div>
-                    <h3 className="font-extrabold text-[#8C5345] text-lg">
+                    <h3 className="font-extrabold text-[#292A25] text-lg">
                       📅 ປະຕິທິນເຊັກຊື່ມາວຽກ: {selectedStaffForAttendance.name} ({selectedStaffForAttendance.role})
                     </h3>
-                    <p className="text-xs text-gray-500 font-bold">ຄລິກແຕ່ລະວັນເພື່ອຕິກ: 🟢 ມາວຽກ | 🔴 ຂາດວຽກ (ຫັກ {selectedStaffForAttendance.absentDeductionPerDay?.toLocaleString()} LAK/ມື້) | 🟡 ລາວຽກ</p>
+                    <p className="text-xs text-[#687568] font-bold">ຄລິກແຕ່ລະວັນເພື່ອຕິກ: 🟢 ມາວຽກ | 🔴 ຂາດວຽກ (ຫັກ {selectedStaffForAttendance.absentDeductionPerDay?.toLocaleString()} LAK/ມື້) | 🟡 ລາວຽກ</p>
                   </div>
                   <button onClick={() => setSelectedStaffForAttendance(null)} className="bg-gray-200 text-gray-700 px-4 py-1.5 rounded-full text-xs font-bold">
                     ❌ ປິດປະຕິທິນ
                   </button>
                 </div>
 
-                <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-[#8C5345]">
+                <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-[#B49A70]">
                   <div>ອາທິດ</div><div>ຈັນ</div><div>ອັງຄານ</div><div>ພຸດ</div><div>ພະຫັດ</div><div>ສຸກ</div><div>ເສົາ</div>
                 </div>
 
@@ -673,7 +677,7 @@ export default function AdminDashboardPage() {
                             ? 'bg-red-100 border-red-400 text-red-800'
                             : status === 'leave'
                             ? 'bg-amber-100 border-amber-400 text-amber-800'
-                            : 'bg-[#FAF3F0] border-[#E8D0C8] text-gray-700 hover:bg-gray-100'
+                            : 'bg-[#F1EBDD] border-[#B49A70]/30 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
                         <span className="font-extrabold text-sm">{day}</span>
@@ -716,13 +720,13 @@ export default function AdminDashboardPage() {
               </div>
             )}
 
-            <div className="bg-white rounded-3xl border border-[#E8D0C8] shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-[#E8D0C8]">
-                <h3 className="font-bold text-[#3D2B27]">ຕາຕະລາງຄິດໄລ່ເງິນເດືອນ, ການຂາດວຽກ & ພະນັກງານ</h3>
+            <div className="bg-white rounded-3xl border border-[#B49A70]/30 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-[#B49A70]/30">
+                <h3 className="font-bold text-[#292A25]">ຕາຕະລາງຄິດໄລ່ເງິນເດືອນ, ການຂາດວຽກ & ພະນັກງານ</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-[#FAF3F0] text-[#8C5345] font-bold text-xs uppercase border-b border-[#E8D0C8]">
+                  <thead className="bg-[#F1EBDD] text-[#292A25] font-bold text-xs uppercase border-b border-[#B49A70]/30">
                     <tr>
                       <th className="p-4">ຊື່ພະນັກງານ</th>
                       <th className="p-4">ຕຳແໜ່ງ</th>
@@ -734,17 +738,17 @@ export default function AdminDashboardPage() {
                       <th className="p-4 text-center">ປະຕິທິນ / ຈັດການ</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8D0C8]">
+                  <tbody className="divide-y divide-[#F1EBDD]">
                     {staffList.map((staff) => {
                       const absentDays = Object.values(staff.attendance || {}).filter((s) => s === 'absent').length;
                       const deduction = absentDays * (staff.absentDeductionPerDay || 100000);
                       const netSalary = staff.baseSalary + staff.jobAllowance * staff.jobsDone - deduction;
                       return (
-                        <tr key={staff.id} className="hover:bg-[#FAF3F0]/50 transition">
-                          <td className="p-4 font-bold text-[#3D2B27]">{staff.name}</td>
+                        <tr key={staff.id} className="hover:bg-[#F1EBDD]/50 transition">
+                          <td className="p-4 font-bold text-[#292A25]">{staff.name}</td>
                           <td className="p-4 text-xs font-medium text-gray-500">{staff.role}</td>
                           <td className="p-4 font-bold">{staff.baseSalary.toLocaleString()} LAK</td>
-                          <td className="p-4 font-bold text-[#8C5345]">+{ (staff.jobAllowance * staff.jobsDone).toLocaleString()} LAK ({staff.jobsDone} ງານ)</td>
+                          <td className="p-4 font-bold text-[#B49A70]">+{ (staff.jobAllowance * staff.jobsDone).toLocaleString()} LAK ({staff.jobsDone} ງານ)</td>
                           <td className="p-4 text-center font-bold text-red-600">{absentDays} ມື້</td>
                           <td className="p-4 text-center font-bold text-red-600">-{deduction.toLocaleString()} LAK</td>
                           <td className="p-4 font-black text-green-700 text-base">{(netSalary > 0 ? netSalary : 0).toLocaleString()} LAK</td>
@@ -771,11 +775,11 @@ export default function AdminDashboardPage() {
         {/* 4️⃣ FINANCE LEDGER TAB */}
         {activeTab === 'finance' && (
           <div className="space-y-6">
-            <div className="flex gap-3 bg-white p-3 rounded-2xl border border-[#E8D0C8] shadow-sm w-fit">
+            <div className="flex gap-3 bg-white p-3 rounded-2xl border border-[#B49A70]/30 shadow-sm w-fit">
               <button
                 onClick={() => setFinanceTimeframe('daily')}
                 className={`px-5 py-2 rounded-xl text-xs font-bold transition ${
-                  financeTimeframe === 'daily' ? 'bg-[#8C5345] text-white shadow' : 'text-gray-600 hover:bg-[#FAF3F0]'
+                  financeTimeframe === 'daily' ? 'bg-[#B49A70] text-white shadow' : 'text-[#292A25] hover:bg-[#F1EBDD]'
                 }`}
               >
                 📅 ປະຈຳວັນ (Daily)
@@ -783,7 +787,7 @@ export default function AdminDashboardPage() {
               <button
                 onClick={() => setFinanceTimeframe('monthly')}
                 className={`px-5 py-2 rounded-xl text-xs font-bold transition ${
-                  financeTimeframe === 'monthly' ? 'bg-[#8C5345] text-white shadow' : 'text-gray-600 hover:bg-[#FAF3F0]'
+                  financeTimeframe === 'monthly' ? 'bg-[#B49A70] text-white shadow' : 'text-[#292A25] hover:bg-[#F1EBDD]'
                 }`}
               >
                 🗓️ ປະຈຳເດືອນ (Monthly)
@@ -791,7 +795,7 @@ export default function AdminDashboardPage() {
               <button
                 onClick={() => setFinanceTimeframe('yearly')}
                 className={`px-5 py-2 rounded-xl text-xs font-bold transition ${
-                  financeTimeframe === 'yearly' ? 'bg-[#8C5345] text-white shadow' : 'text-gray-600 hover:bg-[#FAF3F0]'
+                  financeTimeframe === 'yearly' ? 'bg-[#B49A70] text-white shadow' : 'text-[#292A25] hover:bg-[#F1EBDD]'
                 }`}
               >
                 📆 ປະຈຳປີ (Yearly)
@@ -799,22 +803,22 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-1">💰</div>
                 <p className="text-xs font-bold text-gray-400 uppercase">ລາຍຮັບລວມ ({financeTimeframe})</p>
-                <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{totalRevenue.toLocaleString()} LAK</h2>
+                <h2 className="text-2xl font-black text-[#292A25] mt-1">{totalRevenue.toLocaleString()} LAK</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-1">💵</div>
                 <p className="text-xs font-bold text-gray-400 uppercase">ຍອດມັດຈຳຮັບແລ້ວ (30%)</p>
-                <h2 className="text-2xl font-black text-[#C6936A] mt-1">{totalDeposit.toLocaleString()} LAK</h2>
+                <h2 className="text-2xl font-black text-[#B49A70] mt-1">{totalDeposit.toLocaleString()} LAK</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-1">💸</div>
                 <p className="text-xs font-bold text-gray-400 uppercase">ລາຍຈ່າຍເງິນເດືອນພະນັກງານ</p>
                 <h2 className="text-2xl font-black text-red-600 mt-1">{totalStaffPayroll.toLocaleString()} LAK</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-1">📈</div>
                 <p className="text-xs font-bold text-gray-400 uppercase">ກຳໄລປະມານການ</p>
                 <h2 className="text-2xl font-black text-green-700 mt-1">{(totalRevenue - totalStaffPayroll).toLocaleString()} LAK</h2>
@@ -826,15 +830,15 @@ export default function AdminDashboardPage() {
         {/* 5️⃣ EDITABLE BALANCE SHEET TAB */}
         {activeTab === 'balanceSheet' && (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm flex justify-between items-center">
+            <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm flex justify-between items-center">
               <div>
-                <h3 className="font-bold text-[#3D2B27]">⚙️ ປັບແກ້ໄຂຕົວເລກໃບສະຫຼຸບຊັບສິນ & ທຶນ</h3>
+                <h3 className="font-bold text-[#292A25]">⚙️ ປັບແກ້ໄຂຕົວເລກໃບສະຫຼຸບຊັບສິນ & ທຶນ</h3>
                 <p className="text-xs text-gray-400 font-bold mt-0.5">ທ່ານສາມາດປ້ອນຕົວເລກ ຊັບສິນລວມ ແລະ ທຶນສຸດທິ ໃໝ່ໄດ້ດ້ວຍຕົນເອງ</p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setEditBalanceMode(!editBalanceMode)}
-                  className="bg-[#8C5345] text-white px-4 py-2 rounded-xl text-xs font-bold hover:opacity-90 transition shadow-sm"
+                  className="bg-[#B49A70] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#292A25] transition shadow-sm"
                 >
                   {editBalanceMode ? '❌ ປິດຟອມ' : '✏️ ແກ້ໄຂຕົວເລກຊັບສິນ & ທຶນ'}
                 </button>
@@ -847,29 +851,29 @@ export default function AdminDashboardPage() {
             </div>
 
             {editBalanceMode && (
-              <form onSubmit={handleSaveBalanceSheet} className="bg-white p-6 rounded-3xl border-2 border-[#8C5345] shadow-md grid grid-cols-1 md:grid-cols-3 gap-4">
+              <form onSubmit={handleSaveBalanceSheet} className="bg-white p-6 rounded-3xl border-2 border-[#B49A70] shadow-md grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-gray-600 block mb-1">1. ຊັບສິນລວມ (Total Assets LAK)</label>
+                  <label className="text-xs font-bold text-[#292A25] block mb-1">1. ຊັບສິນລວມ (Total Assets LAK)</label>
                   <input
                     type="number"
                     placeholder={`ປັດຈຸບັນ: ${displayAssets.toLocaleString()}`}
                     value={inputAssets}
                     onChange={(e) => setInputAssets(e.target.value)}
-                    className="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]"
+                    className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-gray-600 block mb-1">3. ທຶນສຸດທິ (Owner's Equity LAK)</label>
+                  <label className="text-xs font-bold text-[#292A25] block mb-1">3. ທຶນສຸດທິ (Owner's Equity LAK)</label>
                   <input
                     type="number"
                     placeholder={`ປັດຈຸບັນ: ${displayEquity.toLocaleString()}`}
                     value={inputEquity}
                     onChange={(e) => setInputEquity(e.target.value)}
-                    className="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]"
+                    className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]"
                   />
                 </div>
                 <div className="flex items-end">
-                  <button type="submit" className="w-full bg-[#8C5345] text-white font-bold py-2 rounded-xl text-sm hover:opacity-90 transition">
+                  <button type="submit" className="w-full bg-[#B49A70] text-white font-bold py-2 rounded-xl text-sm hover:bg-[#292A25] transition">
                     💾 ບັນທຶກຕົວເລກໃໝ່
                   </button>
                 </div>
@@ -886,9 +890,9 @@ export default function AdminDashboardPage() {
                 <p className="text-xs font-bold text-gray-400 uppercase">2. ໜີ້ສິນລວມ (TOTAL LIABILITIES)</p>
                 <h2 className="text-3xl font-black text-red-600 mt-2">{totalLiabilities.toLocaleString()} LAK</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border-2 border-[#8C5345] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border-2 border-[#B49A70] shadow-sm">
                 <p className="text-xs font-bold text-gray-400 uppercase">3. ທຶນສຸດທິ (OWNER'S EQUITY)</p>
-                <h2 className="text-3xl font-black text-[#8C5345] mt-2">{displayEquity.toLocaleString()} LAK</h2>
+                <h2 className="text-3xl font-black text-[#B49A70] mt-2">{displayEquity.toLocaleString()} LAK</h2>
                 {customEquity !== null && <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold mt-2 inline-block">✏️ ປັບແກ້ໄຂເອງ</span>}
               </div>
             </div>
@@ -898,15 +902,15 @@ export default function AdminDashboardPage() {
         {/* 6️⃣ CASH SCAN TAB */}
         {activeTab === 'cashScan' && (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
-              <h3 className="font-bold text-[#3D2B27] mb-4">
+            <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
+              <h3 className="font-bold text-[#292A25] mb-4">
                 {editingCashId ? '✏️ ແກ້ໄຂໃບສະແກນເງິນ' : '📸 ບັນທຶກໃບສະແກນເງິນສົດ / ໃບບິນ'}
               </h3>
               <form onSubmit={(e) => { e.preventDefault(); alert('✅ ບັນທຶກສຳເລັດ!'); }} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <input type="text" required placeholder="ໝາຍເລກອໍເດີ *" value={proofOrderNo} onChange={(e) => setProofOrderNo(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="number" required placeholder="ຈຳນວນເງິນ (LAK) *" value={proofAmount} onChange={(e) => setProofAmount(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <input type="text" placeholder="URL ຮູບໃບບິນ (/logo.png)" value={proofInput} onChange={(e) => setProofInput(e.target.value)} className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#8C5345]" />
-                <button type="submit" className="bg-[#8C5345] text-white font-bold py-2 rounded-xl hover:opacity-90 transition text-sm">➕ ບັນທຶກ</button>
+                <input type="text" required placeholder="ໝາຍເລກອໍເດີ *" value={proofOrderNo} onChange={(e) => setProofOrderNo(e.target.value)} className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="number" required placeholder="ຈຳນວນເງິນ (LAK) *" value={proofAmount} onChange={(e) => setProofAmount(e.target.value)} className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <input type="text" placeholder="URL ຮູບໃບບິນ (/logo.png)" value={proofInput} onChange={(e) => setProofInput(e.target.value)} className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#B49A70]" />
+                <button type="submit" className="bg-[#B49A70] text-white font-bold py-2 rounded-xl hover:bg-[#292A25] transition text-sm">➕ ບັນທຶກ</button>
               </form>
             </div>
           </div>
@@ -916,25 +920,25 @@ export default function AdminDashboardPage() {
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-2">💰</div>
                 <p className="text-xs font-bold text-gray-400">ລາຍຮັບລວມ</p>
-                <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{totalRevenue.toLocaleString()} LAK</h2>
+                <h2 className="text-2xl font-black text-[#292A25] mt-1">{totalRevenue.toLocaleString()} LAK</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-2">💵</div>
                 <p className="text-xs font-bold text-gray-400">ຍອດມັດຈຳ (30%)</p>
-                <h2 className="text-2xl font-black text-[#C6936A] mt-1">{totalDeposit.toLocaleString()} LAK</h2>
+                <h2 className="text-2xl font-black text-[#B49A70] mt-1">{totalDeposit.toLocaleString()} LAK</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-2">✅</div>
                 <p className="text-xs font-bold text-gray-400">ອໍເດີ້ທັງໝົດ</p>
-                <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{orders.length} Orders</h2>
+                <h2 className="text-2xl font-black text-[#292A25] mt-1">{orders.length} Orders</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-[#E8D0C8] shadow-sm">
+              <div className="bg-white p-6 rounded-3xl border border-[#B49A70]/30 shadow-sm">
                 <div className="text-2xl mb-2">👥</div>
                 <p className="text-xs font-bold text-gray-400">ພະນັກງານ</p>
-                <h2 className="text-2xl font-black text-[#A36B5E] mt-1">{staffList.length} 👤</h2>
+                <h2 className="text-2xl font-black text-[#292A25] mt-1">{staffList.length} 👤</h2>
               </div>
             </div>
 
@@ -942,15 +946,15 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* 1. ກຣາຟລາຍຮັບປະຈຳເດືອນ (Area Chart) */}
-              <div className="lg:col-span-2 bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-[#E8D0C8]">
+              <div className="lg:col-span-2 bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-[#B49A70]/30">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                   <div>
-                    <h3 className="text-base md:text-lg font-bold text-[#A36B5E]">
+                    <h3 className="text-base md:text-lg font-bold text-[#292A25]">
                       📈 ແນວໂນ້ມລາຍຮັບປະຈຳເດືອນ
                     </h3>
                     <p className="text-xs text-gray-400">ສະແດງຜົນລາຍຮັບລວມ ແລະ ຍອດມັດຈຳ (LAK)</p>
                   </div>
-                  <span className="self-start sm:self-auto text-xs bg-[#FDF8F6] text-[#A36B5E] font-bold px-3 py-1 rounded-full border border-[#E8D0C8]">
+                  <span className="self-start sm:self-auto text-xs bg-[#F1EBDD] text-[#B49A70] font-bold px-3 py-1 rounded-full border border-[#B49A70]/30">
                     ປີ 2026
                   </span>
                 </div>
@@ -960,32 +964,32 @@ export default function AdminDashboardPage() {
                     <AreaChart data={monthlyRevenueData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#A36B5E" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#A36B5E" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#B49A70" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#B49A70" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="colorDeposit" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#1C6936" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#1C6936" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#687568" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#687568" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1EBDD" />
                       <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} />
                       <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={(v) => `${(v / 1000000).toFixed(1)}M`} />
                       <Tooltip
                         formatter={(value: any) => [`${Number(value).toLocaleString()} LAK`, '']}
-                        contentStyle={{ backgroundColor: '#FFF', borderRadius: '16px', borderColor: '#E8D0C8', fontSize: '12px' }}
+                        contentStyle={{ backgroundColor: '#FFF', borderRadius: '16px', borderColor: '#B49A70', fontSize: '12px' }}
                       />
-                      <Area type="monotone" dataKey="revenue" name="ລາຍຮັບລວມ" stroke="#A36B5E" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
-                      <Area type="monotone" dataKey="deposit" name="ຍອດມັດຈຳ (30%)" stroke="#10B981" strokeWidth={2} fillOpacity={1} fill="url(#colorDeposit)" />
+                      <Area type="monotone" dataKey="revenue" name="ລາຍຮັບລວມ" stroke="#B49A70" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                      <Area type="monotone" dataKey="deposit" name="ຍອດມັດຈຳ (30%)" stroke="#687568" strokeWidth={2} fillOpacity={1} fill="url(#colorDeposit)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
               </div>
 
               {/* 2. ກຣາຟສະຖິຕິສະຖານະອໍເດີ (Donut Chart) */}
-              <div className="bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-[#E8D0C8] flex flex-col justify-between">
+              <div className="bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-[#B49A70]/30 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-base md:text-lg font-bold text-[#A36B5E] mb-1">📊 ສະຖິຕິອໍເດີ</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#292A25] mb-1">📊 ສະຖິຕິອໍເດີ</h3>
                   <p className="text-xs text-gray-400 mb-4">ສັດສ່ວນສະຖານະອໍເດີທັງໝົດ</p>
 
                   <div className="h-[200px] w-full relative flex items-center justify-center">
@@ -1000,7 +1004,7 @@ export default function AdminDashboardPage() {
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                      <span className="text-2xl font-black text-[#A36B5E]">{orders.length}</span>
+                      <span className="text-2xl font-black text-[#B49A70]">{orders.length}</span>
                       <span className="text-[10px] text-gray-400">ອໍເດີທັງໝົດ</span>
                     </div>
                   </div>

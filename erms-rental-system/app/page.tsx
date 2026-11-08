@@ -7,8 +7,8 @@ import { supabase } from '@/lib/supabase';
 // 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN)
 const translations = {
   la: {
-    siteTitle: 'ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ',
-    siteSubtitle: 'MONGKHON COMPANY SOLE CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
+    siteTitle: 'ບໍລິສັດ ມຸງຄົນ ຈຳກັດ',
+    siteSubtitle: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
     cart: 'ຕະກ້າ',
     quotationBtn: 'ໃບສະເໜີລາຄາ',
     heroTag: 'MONGKHON EVENT EQUIPMENT RENTAL SERVICE',
@@ -47,8 +47,8 @@ const translations = {
     closeBtn: '❌ ປິດ',
   },
   en: {
-    siteTitle: 'Mongkhon Company Sole Co., Ltd',
-    siteSubtitle: 'MONGKHON COMPANY SOLE CO., LTD - Event Equipment Rental',
+    siteTitle: 'Mongkhon Company Co., Ltd',
+    siteSubtitle: 'MONGKHON COMPANY CO., LTD - Event Equipment Rental',
     cart: 'Cart',
     quotationBtn: 'Quotation',
     heroTag: 'MONGKHON EVENT EQUIPMENT RENTAL SERVICE',
