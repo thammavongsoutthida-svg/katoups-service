@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
-// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN) - ປ່ຽນຊື່ແບຣນເປັນ ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ[cite: 8]
+// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN) - ປ່ຽນຊື່ພາສາອັງກິດເປັນ MONGKHON 100%
 const translations = {
   la: {
     siteTitle: 'ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ',
-    siteSubtitle: 'MUNGKHON COMPANY SOLE CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
+    siteSubtitle: 'MONGKHON COMPANY SOLE CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
     cart: 'ຕະກ້າ',
     quotationBtn: 'ໃບສະເໜີລາຄາ',
-    heroTag: 'MUNGKHON EVENT EQUIPMENT RENTAL SERVICE',
+    heroTag: 'MONGKHON EVENT EQUIPMENT RENTAL SERVICE',
     heroTitle: 'ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
     heroDesc: 'ຍົກລະດັບງານລ້ຽງຂອງທ່ານດ້ວຍເຕັ້ນ Marquee ຫຍູ້ຫລາ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ແລະ ອຸປະກອນຈັດງານລ້ຽງຄົບວົງຈອນ.',
     galleryTitle: 'ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ',
@@ -47,11 +47,11 @@ const translations = {
     closeBtn: '❌ ປິດ',
   },
   en: {
-    siteTitle: 'Mungkkhon Company Sole Co., Ltd',
-    siteSubtitle: 'MUNGKHON COMPANY SOLE CO., LTD - Event Equipment Rental',
+    siteTitle: 'Mongkhon Company Sole Co., Ltd',
+    siteSubtitle: 'MONGKHON COMPANY SOLE CO., LTD - Event Equipment Rental',
     cart: 'Cart',
     quotationBtn: 'Quotation',
-    heroTag: 'MUNGKHON EVENT EQUIPMENT RENTAL SERVICE',
+    heroTag: 'MONGKHON EVENT EQUIPMENT RENTAL SERVICE',
     heroTitle: 'Marquee Tent, Table, Chair & Event Equipment Rental',
     heroDesc: 'Elevate your special events with luxury Marquee tents, Tiffany chair sets, evaporative air coolers, artificial grass, and complete event gear.',
     galleryTitle: 'Portfolio & Setup Showcase',
@@ -104,12 +104,10 @@ export default function ClientHomePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [todayMin, setTodayMin] = useState<string>('');
 
-  // 🗓️ ຕັ້ງວັນທີປັດຈຸບັນຝ່າຍ Client-side ເພື່ອປ້ອງກັນ Build Fail[cite: 8]
   useEffect(() => {
     setTodayMin(new Date().toISOString().split('T')[0]);
   }, []);
 
-  // 🔄 ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase[cite: 8]
   const fetchBookedDates = async () => {
     try {
       const { data } = await supabase
@@ -129,7 +127,6 @@ export default function ClientHomePage() {
   useEffect(() => {
     fetchBookedDates();
 
-    // ⚡ Realtime Listener[cite: 8]
     const channel = supabase
       .channel('public:orders')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
@@ -142,7 +139,6 @@ export default function ClientHomePage() {
     };
   }, []);
 
-  // 📦 ຮັກສາລາຍການອຸປະກອນ ແລະ ລາຄາ 25,000 LAK ຂອງ eq-11 (ຊຸດພລາສຕິກ+ຜ້າກວມ) ໄວ້ຄືເກົ່າ[cite: 8]
   const stockItems = [
     { id: 'eq-1', name: lang === 'la' ? 'ເຕັ້ນ Marquee VIP 10x12' : 'VIP Marquee Tent 10x12m', price: 8000000, img: '/tt.png' },
     { id: 'eq-2', name: lang === 'la' ? 'ເຕັ້ນ Marquee 6x8' : 'Marquee Tent 6x8m', price: 1500000, img: '/tt.png' },
@@ -205,14 +201,12 @@ export default function ClientHomePage() {
   const deposit30 = totalAmount * 0.3;
   const balance70 = totalAmount - deposit30;
 
-  // 📱 ຟັງຊັນຈຳກັດເບີໂທ strictly ບໍ່ໃຫ້ເກີນ 11 ຕົວເລກ[cite: 8]
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const cleanNumbersOnly = e.target.value.replace(/\D/g, '');
     const limitedPhone = cleanNumbersOnly.slice(0, 11);
     setPhone(limitedPhone);
   };
 
-  // 📅 ຟັງຊັນຈັດການວັນທີເລີ່ມເຊົ່າ[cite: 8]
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
     if (!selected) return;
@@ -229,7 +223,6 @@ export default function ClientHomePage() {
     }
   };
 
-  // 📅 ຟັງຊັນຈັດການວັນທີສົ່ງເຄື່ອງ[cite: 8]
   const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
     if (!startDate) {
@@ -241,7 +234,6 @@ export default function ClientHomePage() {
     setEndDate(selected);
   };
 
-  // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database[cite: 8]
   const handleCreateQuotation = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -313,13 +305,12 @@ export default function ClientHomePage() {
   };
 
   return (
-    /* 🎨 Background Warm Ivory (#F1EBDD) & Text Deep Charcoal (#292A25)[cite: 9] */
     <div className="min-h-screen bg-[#F1EBDD] font-['Noto_Sans_Lao',sans-serif] text-[#292A25]">
       {/* HEADER NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#B49A70]/30 px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
-            <Image src="/logo.png" alt="Mungkkhon Logo" fill className="object-contain" />
+            <Image src="/logo.png" alt="Mongkhon Logo" fill className="object-contain" />
           </div>
           <div>
             <h1 className="font-extrabold text-[#292A25] text-base leading-none">{t.siteTitle}</h1>
@@ -328,12 +319,10 @@ export default function ClientHomePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Muted Sage (#687568) Button[cite: 9] */}
           <button onClick={scrollToQuotation} className="bg-[#687568] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>🛒 {t.cart} ({cartTotalItems})</span>
           </button>
 
-          {/* Champagne Gold (#B49A70) Button[cite: 9] */}
           <button onClick={scrollToQuotation} className="bg-[#B49A70] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>📄 {t.quotationBtn}</span>
           </button>
@@ -344,22 +333,22 @@ export default function ClientHomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION - ປັບ Spacing & Size ໃຫ້ສົມດຸນສົມສ່ວນ */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
-        <div className="text-center space-y-4">
-          {/* 🖼️ ຂະຫຍາຍໂລໂກ້ໃຫຍ່ (w-52 h-52) ແລະ ເດັ່ນ[cite: 8] */}
-          <div className="w-48 h-48 md:w-52 md:h-52 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-md">
-            <Image src="/logo.png" alt="Mungkkhon Logo Large" fill className="object-contain" priority />
+        <div className="text-center space-y-3.5">
+          {/* 🖼️ ຂະໜາດໂລໂກ້ປັບໃຫ້ສົມດຸນພໍດີກັບ Element ອື່ນໆ (w-40 h-40 md:w-44 md:h-44) */}
+          <div className="w-40 h-40 md:w-44 md:h-44 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
+            <Image src="/logo.png" alt="Mongkhon Logo Large" fill className="object-contain" priority />
           </div>
           <div className="inline-block">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#B49A70] bg-[#292A25] px-4 py-1.5 rounded-full border border-[#B49A70]">
+            <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-[#B49A70] bg-[#292A25] px-4 py-1.5 rounded-full border border-[#B49A70]">
               {t.heroTag}
             </span>
           </div>
-          <h2 className="text-2xl md:text-4xl font-extrabold text-[#292A25]">
+          <h2 className="text-2xl md:text-4xl font-extrabold text-[#292A25] leading-snug">
             {t.heroTitle} <span className="text-[#B49A70]">{t.siteTitle}</span>
           </h2>
-          <p className="text-xs md:text-sm text-[#292A25]/70 max-w-2xl mx-auto font-medium">
+          <p className="text-xs md:text-sm text-[#292A25]/70 max-w-2xl mx-auto font-medium leading-relaxed">
             {t.heroDesc}
           </p>
         </div>
@@ -552,7 +541,7 @@ export default function ClientHomePage() {
             </div>
 
             <a
-              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Mungkkhon Company Order: ${showInvoiceModal.orderNo}\nCustomer: ${showInvoiceModal.customerName}\nPhone:${showInvoiceModal.phone}\nDate: ${showInvoiceModal.eventDate}\nTotal:${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
+              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Mongkhon Company Order: ${showInvoiceModal.orderNo}\nCustomer: ${showInvoiceModal.customerName}\nPhone:${showInvoiceModal.phone}\nDate: ${showInvoiceModal.eventDate}\nTotal:${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
               target="_blank"
               rel="noreferrer"
               className="w-full block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl shadow hover:opacity-90 transition text-xs"
