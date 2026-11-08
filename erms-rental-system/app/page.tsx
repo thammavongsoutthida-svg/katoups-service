@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
-// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN) - ປ່ຽນຊື່ພາສາອັງກິດເປັນ MONGKHON 100%
+// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN)
 const translations = {
   la: {
     siteTitle: 'ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ',
@@ -160,7 +160,7 @@ export default function ClientHomePage() {
     { id: 'g-3', title: lang === 'la' ? 'ບັນຍາກາດການຈັດງານດອງ' : 'Wedding Ceremony Atmosphere', img: '/13.jpeg' },
     { id: 'g-4', title: lang === 'la' ? 'ເຕັ້ນໂຄງສ້າງ Marquee White VIP' : 'White Marquee Structure Tent', img: '/44.jpeg' },
     { id: 'g-5', title: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Golden VIP' : 'Tiffany Golden VIP Dining Set', img: '/45.jpeg' },
-    { id: 'g-6', title: lang === 'la' ? 'ງານປະດັບໄຟ ແລະ ເຕັ້ນປະດັບ' : 'Lighting Decor & Event Tent', img: '/56.jpeg' },
+    { id: 'g-6', title: lang === 'la' ? 'ງານປະດັບໄຟ ແລະ ເເຕັ້ນປະດັບ' : 'Lighting Decor & Event Tent', img: '/56.jpeg' },
     { id: 'g-7', title: lang === 'la' ? 'ຊຸດໂຕະຕັ່ງ Tiffany Classic' : 'Tiffany Classic Chair Setup', img: '/656.jpeg' },
     { id: 'g-8', title: lang === 'la' ? 'ດອກໄຟແຊນເດີເລຍ' : 'Luxury Chandelier Lighting', img: '/656565.jpeg' },
   ];
@@ -333,18 +333,20 @@ export default function ClientHomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION - ປັບ Spacing & Size ໃຫ້ສົມດຸນສົມສ່ວນ */}
+      {/* HERO SECTION */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
-        <div className="text-center space-y-3.5">
-          {/* 🖼️ ຂະໜາດໂລໂກ້ປັບໃຫ້ສົມດຸນພໍດີກັບ Element ອື່ນໆ (w-40 h-40 md:w-44 md:h-44) */}
-          <div className="w-40 h-40 md:w-44 md:h-44 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
+        <div className="text-center space-y-3.5 flex flex-col items-center">
+          {/* 🖼️ ຂະຫຍາຍຄວາມກວ້າງໂລໂກ້ (w-[280px] md:w-[320px]) ໃຫ້ເທົ່າກັບປ້າຍ MONGKHON ດ້ານລຸ່ມ */}
+          <div className="w-[280px] h-[150px] md:w-[320px] md:h-[170px] relative overflow-hidden flex items-center justify-center drop-shadow-sm">
             <Image src="/logo.png" alt="Mongkhon Logo Large" fill className="object-contain" priority />
           </div>
+
           <div className="inline-block">
             <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-[#B49A70] bg-[#292A25] px-4 py-1.5 rounded-full border border-[#B49A70]">
               {t.heroTag}
             </span>
           </div>
+
           <h2 className="text-2xl md:text-4xl font-extrabold text-[#292A25] leading-snug">
             {t.heroTitle} <span className="text-[#B49A70]">{t.siteTitle}</span>
           </h2>
