@@ -4,17 +4,17 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
-// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN)
+// 🌐 ວັດຈະນານຸກົມ 2 ພາສາ (LA / EN) - ປ່ຽນຊື່ແບຣນເປັນ ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ[cite: 8]
 const translations = {
   la: {
-    siteTitle: 'ກະຕູບສ໌ ບໍລິການ',
-    siteSubtitle: 'KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
+    siteTitle: 'ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ',
+    siteSubtitle: 'MUNGKHON COMPANY SOLE CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
     cart: 'ຕະກ້າ',
     quotationBtn: 'ໃບສະເໜີລາຄາ',
-    heroTag: 'KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)',
+    heroTag: 'MUNGKHON EVENT EQUIPMENT RENTAL SERVICE',
     heroTitle: 'ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
     heroDesc: 'ຍົກລະດັບງານລ້ຽງຂອງທ່ານດ້ວຍເຕັ້ນ Marquee ຫຍູ້ຫລາ, ຊຸດໂຕະຕັ່ງ Tiffany, ພັດລົມໄອເຢັນ, ຫຍ້າທຽມ ແລະ ອຸປະກອນຈັດງານລ້ຽງຄົບວົງຈອນ.',
-    galleryTitle: 'ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ກະຕູບສ໌ ບໍລິການ',
+    galleryTitle: 'ພາບຜົນງານການຈັດງານລ້ຽງຂອງ ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ',
     gallerySubtitle: 'ຕົວຢ່າງງານຕິດຕັ້ງເຕັ້ນ VIP, ຊຸດໂຕະຕັ່ງ ແລະ ການປະດັບປະດາ',
     works: 'ຜົນງານ',
     selectEquipment: 'ເລືອກອຸປະກອນເຊົ່າ',
@@ -47,11 +47,11 @@ const translations = {
     closeBtn: '❌ ປິດ',
   },
   en: {
-    siteTitle: 'Katoups Service',
-    siteSubtitle: 'KATOUPS SERVICE - Event Equipment Rental',
+    siteTitle: 'Mungkkhon Company Sole Co., Ltd',
+    siteSubtitle: 'MUNGKHON COMPANY SOLE CO., LTD - Event Equipment Rental',
     cart: 'Cart',
     quotationBtn: 'Quotation',
-    heroTag: 'KATOUPS EVENT EQUIPMENT RENTAL SERVICE (SINCE 2021)',
+    heroTag: 'MUNGKHON EVENT EQUIPMENT RENTAL SERVICE',
     heroTitle: 'Marquee Tent, Table, Chair & Event Equipment Rental',
     heroDesc: 'Elevate your special events with luxury Marquee tents, Tiffany chair sets, evaporative air coolers, artificial grass, and complete event gear.',
     galleryTitle: 'Portfolio & Setup Showcase',
@@ -104,12 +104,12 @@ export default function ClientHomePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [todayMin, setTodayMin] = useState<string>('');
 
-  // 🗓️ ຕັ້ງວັນທີປັດຈຸບັນຝ່າຍ Client-side ເພື່ອປ້ອງກັນ Build Fail
+  // 🗓️ ຕັ້ງວັນທີປັດຈຸບັນຝ່າຍ Client-side ເພື່ອປ້ອງກັນ Build Fail[cite: 8]
   useEffect(() => {
     setTodayMin(new Date().toISOString().split('T')[0]);
   }, []);
 
-  // 🔄 ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase
+  // 🔄 ດຶງຂໍ້ມູນວັນທີໆມີການຈອງແລ້ວຈາກ Supabase[cite: 8]
   const fetchBookedDates = async () => {
     try {
       const { data } = await supabase
@@ -129,7 +129,7 @@ export default function ClientHomePage() {
   useEffect(() => {
     fetchBookedDates();
 
-    // ⚡ Realtime Listener
+    // ⚡ Realtime Listener[cite: 8]
     const channel = supabase
       .channel('public:orders')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
@@ -142,6 +142,7 @@ export default function ClientHomePage() {
     };
   }, []);
 
+  // 📦 ຮັກສາລາຍການອຸປະກອນ ແລະ ລາຄາ 25,000 LAK ຂອງ eq-11 (ຊຸດພລາສຕິກ+ຜ້າກວມ) ໄວ້ຄືເກົ່າ[cite: 8]
   const stockItems = [
     { id: 'eq-1', name: lang === 'la' ? 'ເຕັ້ນ Marquee VIP 10x12' : 'VIP Marquee Tent 10x12m', price: 8000000, img: '/tt.png' },
     { id: 'eq-2', name: lang === 'la' ? 'ເຕັ້ນ Marquee 6x8' : 'Marquee Tent 6x8m', price: 1500000, img: '/tt.png' },
@@ -204,21 +205,21 @@ export default function ClientHomePage() {
   const deposit30 = totalAmount * 0.3;
   const balance70 = totalAmount - deposit30;
 
-  // 📱 ຟັງຊັນຈຳກັດເບີໂທ strictly ບໍ່ໃຫ້ເກີນ 11 ຕົວເລກ
+  // 📱 ຟັງຊັນຈຳກັດເບີໂທ strictly ບໍ່ໃຫ້ເກີນ 11 ຕົວເລກ[cite: 8]
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const cleanNumbersOnly = e.target.value.replace(/\D/g, '');
     const limitedPhone = cleanNumbersOnly.slice(0, 11);
     setPhone(limitedPhone);
   };
 
-  // 📅 ຟັງຊັນຈັດການວັນທີເລີ່ມເຊົ່າ (ປ້ອງກັນວັນທີເຕັມຢ່າງຮັດກຸມ)
+  // 📅 ຟັງຊັນຈັດການວັນທີເລີ່ມເຊົ່າ[cite: 8]
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
     if (!selected) return;
 
     if (bookedDates.includes(selected)) {
       alert(lang === 'la' ? `⚠️ ວັນທີ ${selected} ມີຄິວຈອງເຕັມແລ້ວ! ກະລຸນາເລືອກວັນທີອື່ນ.` : `⚠️ Date ${selected} is fully booked! Please select another date.`);
-      e.target.value = ''; // ລ້າງຄ່າໃນ input element ທັນທີ
+      e.target.value = ''; 
       setStartDate('');
       return;
     }
@@ -228,7 +229,7 @@ export default function ClientHomePage() {
     }
   };
 
-  // 📅 ຟັງຊັນຈັດການວັນທີສົ່ງເຄື່ອງ (ກວດເຊັກເລີ່ມເຊົ່າກ່ອນ)
+  // 📅 ຟັງຊັນຈັດການວັນທີສົ່ງເຄື່ອງ[cite: 8]
   const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.value;
     if (!startDate) {
@@ -240,7 +241,7 @@ export default function ClientHomePage() {
     setEndDate(selected);
   };
 
-  // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database ຫາ Admin 100%
+  // 📝 ຟັງຊັນບັນທຶກອໍເດີເຂົ້າ Supabase Database[cite: 8]
   const handleCreateQuotation = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -268,7 +269,7 @@ export default function ClientHomePage() {
     const orderNo = `QUO-${Math.floor(10000 + Math.random() * 90000)}`;
 
     const newOrder = {
-      id: Date.now().toString(), // 👈 ວາງ id ເພື່ອປ້ອງກັນ not-null constraint error ຈາກ Supabase
+      id: Date.now().toString(),
       order_no: orderNo,
       customer_name: customerName,
       phone: phone,
@@ -312,29 +313,32 @@ export default function ClientHomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF3F0] font-['Noto_Sans_Lao',sans-serif] text-[#3D2B27]">
+    /* 🎨 Background Warm Ivory (#F1EBDD) & Text Deep Charcoal (#292A25)[cite: 9] */
+    <div className="min-h-screen bg-[#F1EBDD] font-['Noto_Sans_Lao',sans-serif] text-[#292A25]">
       {/* HEADER NAVBAR */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E8D0C8] px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#B49A70]/30 px-4 md:px-8 py-3 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 relative overflow-hidden flex items-center justify-center">
-            <Image src="/logo.png" alt="Katoups Logo" fill className="object-contain" />
+            <Image src="/logo.png" alt="Mungkkhon Logo" fill className="object-contain" />
           </div>
           <div>
-            <h1 className="font-extrabold text-[#C6936A] text-base leading-none">{t.siteTitle}</h1>
-            <p className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5">{t.siteSubtitle}</p>
+            <h1 className="font-extrabold text-[#292A25] text-base leading-none">{t.siteTitle}</h1>
+            <p className="text-[10px] text-[#B49A70] font-bold tracking-tight mt-0.5">{t.siteSubtitle}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <button onClick={scrollToQuotation} className="bg-[#8C5345] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
+          {/* Muted Sage (#687568) Button[cite: 9] */}
+          <button onClick={scrollToQuotation} className="bg-[#687568] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>🛒 {t.cart} ({cartTotalItems})</span>
           </button>
 
-          <button onClick={scrollToQuotation} className="bg-[#C6936A] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
+          {/* Champagne Gold (#B49A70) Button[cite: 9] */}
+          <button onClick={scrollToQuotation} className="bg-[#B49A70] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>📄 {t.quotationBtn}</span>
           </button>
 
-          <button onClick={() => setLang(lang === 'la' ? 'en' : 'la')} className="text-xs border border-[#C6936A] bg-[#FAF3F0] text-[#C6936A] font-extrabold px-3 py-1 rounded-full hover:bg-white transition">
+          <button onClick={() => setLang(lang === 'la' ? 'en' : 'la')} className="text-xs border border-[#B49A70] bg-[#F1EBDD] text-[#292A25] font-extrabold px-3 py-1 rounded-full hover:bg-white transition">
             🌐 {lang === 'la' ? 'EN' : 'LA'}
           </button>
         </div>
@@ -342,45 +346,46 @@ export default function ClientHomePage() {
 
       {/* HERO SECTION */}
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
-        <div className="text-center space-y-3">
-          <div className="w-32 h-32 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-sm">
-            <Image src="/logo.png" alt="Katoups Logo Large" fill className="object-contain" />
+        <div className="text-center space-y-4">
+          {/* 🖼️ ຂະຫຍາຍໂລໂກ້ໃຫຍ່ (w-52 h-52) ແລະ ເດັ່ນ[cite: 8] */}
+          <div className="w-48 h-48 md:w-52 md:h-52 mx-auto relative overflow-hidden flex items-center justify-center drop-shadow-md">
+            <Image src="/logo.png" alt="Mungkkhon Logo Large" fill className="object-contain" priority />
           </div>
           <div className="inline-block">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#A36B5E] bg-[#E8D0C8]/40 px-3.5 py-1 rounded-full border border-[#E8D0C8]">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-[#B49A70] bg-[#292A25] px-4 py-1.5 rounded-full border border-[#B49A70]">
               {t.heroTag}
             </span>
           </div>
-          <h2 className="text-2xl md:text-4xl font-extrabold text-[#3D2B27]">
-            {t.heroTitle} <span className="text-[#C6936A]">{t.siteTitle}</span>
+          <h2 className="text-2xl md:text-4xl font-extrabold text-[#292A25]">
+            {t.heroTitle} <span className="text-[#B49A70]">{t.siteTitle}</span>
           </h2>
-          <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto">
+          <p className="text-xs md:text-sm text-[#292A25]/70 max-w-2xl mx-auto font-medium">
             {t.heroDesc}
           </p>
         </div>
 
         {/* SECTION ພາບຜົນງານ */}
         <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-[#E8D0C8] pb-2">
+          <div className="flex items-center justify-between border-b border-[#B49A70]/30 pb-2">
             <div>
-              <h3 className="text-lg md:text-xl font-black text-[#A36B5E] flex items-center gap-2">
-                <span>✨</span> {t.galleryTitle}
+              <h3 className="text-lg md:text-xl font-black text-[#292A25] flex items-center gap-2">
+                <span className="text-[#B49A70]">✨</span> {t.galleryTitle}
               </h3>
-              <p className="text-xs text-gray-400 font-bold">{t.gallerySubtitle}</p>
+              <p className="text-xs text-[#687568] font-bold">{t.gallerySubtitle}</p>
             </div>
-            <span className="text-xs font-bold text-[#C6936A] bg-white px-3 py-1 rounded-full border border-[#E8D0C8]">
+            <span className="text-xs font-bold text-[#B49A70] bg-white px-3 py-1 rounded-full border border-[#B49A70]/30">
               {galleryImages.length} {t.works}
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {galleryImages.map((g) => (
-              <div key={g.id} className="group relative bg-white rounded-3xl overflow-hidden border border-[#E8D0C8] shadow-sm hover:shadow-lg transition duration-300">
-                <div className="h-56 sm:h-64 w-full relative bg-[#FAF3F0]">
+              <div key={g.id} className="group relative bg-white rounded-3xl overflow-hidden border border-[#B49A70]/20 shadow-sm hover:shadow-lg transition duration-300">
+                <div className="h-56 sm:h-64 w-full relative bg-[#F1EBDD]">
                   <Image src={g.img} alt={g.title} fill className="object-cover group-hover:scale-105 transition duration-500" onError={(e: any) => { e.target.srcset = '/logo.png'; }} />
                 </div>
-                <div className="p-3 text-center bg-white border-t border-[#FAF3F0]">
-                  <p className="text-xs font-bold text-[#3D2B27]">{g.title}</p>
+                <div className="p-3 text-center bg-white border-t border-[#F1EBDD]">
+                  <p className="text-xs font-bold text-[#292A25]">{g.title}</p>
                 </div>
               </div>
             ))}
@@ -390,36 +395,36 @@ export default function ClientHomePage() {
         {/* SECTION ເມນູເລືອກເຊົ່າ & ຟອມ */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
-            <div className="border-b border-[#E8D0C8] pb-2">
-              <h3 className="text-lg font-black text-[#8C5345]">🎪 {t.selectEquipment}</h3>
-              <p className="text-xs text-gray-400 font-bold">{t.selectDesc}</p>
+            <div className="border-b border-[#B49A70]/30 pb-2">
+              <h3 className="text-lg font-black text-[#292A25]">🎪 {t.selectEquipment}</h3>
+              <p className="text-xs text-[#687568] font-bold">{t.selectDesc}</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {stockItems.map((item) => {
                 const qty = cart[item.id] || 0;
                 return (
-                  <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#E8D0C8] shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                  <div key={item.id} className="bg-white rounded-3xl p-4 border border-[#B49A70]/20 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                     <div className="space-y-3">
-                      <div className="h-32 w-full relative bg-[#FAF3F0] rounded-2xl overflow-hidden">
+                      <div className="h-32 w-full relative bg-[#F1EBDD] rounded-2xl overflow-hidden">
                         <Image src={item.img} alt={item.name} fill className="object-cover" onError={(e: any) => { e.target.srcset = '/logo.png'; }} />
                       </div>
                       <div>
-                        <h3 className="font-bold text-xs text-[#3D2B27] min-h-[32px]">{item.name}</h3>
-                        <p className="text-sm font-extrabold text-[#8C5345] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">{t.perDay}</span></p>
+                        <h3 className="font-bold text-xs text-[#292A25] min-h-[32px]">{item.name}</h3>
+                        <p className="text-sm font-extrabold text-[#B49A70] mt-1">{item.price.toLocaleString()} LAK <span className="text-[10px] text-gray-400 font-normal">{t.perDay}</span></p>
                       </div>
                     </div>
 
                     <div className="mt-4">
                       {qty === 0 ? (
-                        <button onClick={() => addToCart(item.id)} className="w-full bg-[#8C5345] text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 transition">
+                        <button onClick={() => addToCart(item.id)} className="w-full bg-[#687568] text-white text-xs font-bold py-2 rounded-xl hover:bg-[#292A25] transition">
                           {t.addToCart}
                         </button>
                       ) : (
-                        <div className="flex items-center justify-between bg-[#FAF3F0] rounded-xl p-1 border border-[#E8D0C8]">
-                          <button onClick={() => removeFromCart(item.id)} className="w-7 h-7 bg-white text-[#8C5345] font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">-</button>
-                          <span className="font-extrabold text-xs text-[#8C5345]">{qty}</span>
-                          <button onClick={() => addToCart(item.id)} className="w-7 h-7 bg-[#8C5345] text-white font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">+</button>
+                        <div className="flex items-center justify-between bg-[#F1EBDD] rounded-xl p-1 border border-[#B49A70]/30">
+                          <button onClick={() => removeFromCart(item.id)} className="w-7 h-7 bg-white text-[#292A25] font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">-</button>
+                          <span className="font-extrabold text-xs text-[#292A25]">{qty}</span>
+                          <button onClick={() => addToCart(item.id)} className="w-7 h-7 bg-[#B49A70] text-white font-bold rounded-lg shadow-sm text-sm flex items-center justify-center">+</button>
                         </div>
                       )}
                     </div>
@@ -430,46 +435,46 @@ export default function ClientHomePage() {
           </div>
 
           {/* 📝 ຟອມອອກໃບສະເໜີລາຄາ */}
-          <div id="quotation-form" className="bg-white p-6 rounded-3xl border-2 border-[#C6936A] shadow-md h-fit space-y-5 scroll-mt-24">
+          <div id="quotation-form" className="bg-white p-6 rounded-3xl border-2 border-[#B49A70] shadow-md h-fit space-y-5 scroll-mt-24">
             <div>
-              <h3 className="font-extrabold text-[#8C5345] text-base">{t.quotationFormTitle}</h3>
+              <h3 className="font-extrabold text-[#292A25] text-base">{t.quotationFormTitle}</h3>
               <p className="text-xs text-gray-400 font-bold mt-0.5">{t.quotationFormDesc}</p>
             </div>
 
-            <div className="space-y-2 border-y border-[#E8D0C8] py-3 text-xs">
+            <div className="space-y-2 border-y border-[#B49A70]/20 py-3 text-xs">
               <div className="flex justify-between font-bold text-gray-500">
                 <span>{t.totalItems}</span>
-                <span className="text-[#8C5345]">{cartTotalItems} {t.itemsCount}</span>
+                <span className="text-[#B49A70]">{cartTotalItems} {t.itemsCount}</span>
               </div>
               <div className="flex justify-between font-bold text-gray-500">
                 <span>{t.totalRent}</span>
-                <span className="text-base font-black text-[#3D2B27]">{totalAmount.toLocaleString()} LAK</span>
+                <span className="text-base font-black text-[#292A25]">{totalAmount.toLocaleString()} LAK</span>
               </div>
               <div className="flex justify-between font-bold text-gray-500">
                 <span>{t.deposit30}</span>
-                <span className="text-[#8C5345]">{deposit30.toLocaleString()} LAK</span>
+                <span className="text-[#687568]">{deposit30.toLocaleString()} LAK</span>
               </div>
               <div className="flex justify-between font-bold text-gray-500 pt-1 border-t border-dashed">
                 <span>{t.balance70}</span>
-                <span className="text-[#C6936A] font-extrabold">{balance70.toLocaleString()} LAK</span>
+                <span className="text-[#B49A70] font-extrabold">{balance70.toLocaleString()} LAK</span>
               </div>
             </div>
 
             <form onSubmit={handleCreateQuotation} className="space-y-3">
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">{t.customerNameLabel}</label>
+                <label className="text-[11px] font-bold text-[#292A25] block mb-1">{t.customerNameLabel}</label>
                 <input
                   type="text"
                   required
                   placeholder={t.customerNamePlaceholder}
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]"
+                  className="w-full border border-gray-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">{t.phoneLabel}</label>
+                <label className="text-[11px] font-bold text-[#292A25] block mb-1">{t.phoneLabel}</label>
                 <input
                   type="text"
                   required
@@ -479,48 +484,48 @@ export default function ClientHomePage() {
                   placeholder={t.phonePlaceholder}
                   value={phone}
                   onChange={handlePhoneChange}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345] font-mono"
+                  className="w-full border border-gray-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70] font-mono"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">{t.startDateLabel}</label>
+                  <label className="text-[10px] font-bold text-[#292A25] block mb-1">{t.startDateLabel}</label>
                   <input
                     type="date"
                     required
                     value={startDate}
                     min={todayMin}
                     onChange={handleStartDateChange}
-                    className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
+                    className="w-full border border-gray-300 rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#B49A70]"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-gray-600 block mb-1">{t.endDateLabel}</label>
+                  <label className="text-[10px] font-bold text-[#292A25] block mb-1">{t.endDateLabel}</label>
                   <input
                     type="date"
                     value={endDate}
                     min={startDate || todayMin}
                     onChange={handleEndDateChange}
-                    className="w-full border rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#8C5345]"
+                    className="w-full border border-gray-300 rounded-xl px-2 py-1.5 text-xs focus:outline-none focus:border-[#B49A70]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-gray-600 block mb-1">{t.locationLabel}</label>
+                <label className="text-[11px] font-bold text-[#292A25] block mb-1">{t.locationLabel}</label>
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#8C5345]"
+                  className="w-full border border-gray-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#B49A70]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#8C5345] text-white font-bold py-3 rounded-2xl text-xs hover:opacity-90 transition shadow-md mt-2 flex items-center justify-center gap-1.5 disabled:bg-gray-400"
+                className="w-full bg-[#B49A70] text-white font-bold py-3 rounded-2xl text-xs hover:bg-[#292A25] transition shadow-md mt-2 flex items-center justify-center gap-1.5 disabled:bg-gray-400"
               >
                 <span>{isSubmitting ? t.submittingBtn : t.submitBtn}</span>
               </button>
@@ -532,22 +537,22 @@ export default function ClientHomePage() {
       {/* 📄 MODAL INVOICE */}
       {showInvoiceModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-[#E8D0C8]">
+          <div className="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-[#B49A70]/30">
             <div className="text-center space-y-1">
               <span className="text-2xl">🎉</span>
-              <h3 className="text-lg font-black text-[#8C5345]">{t.modalTitle}</h3>
-              <p className="text-xs text-gray-400">{t.orderNoLabel} <span className="font-bold text-[#C6936A]">{showInvoiceModal.orderNo}</span></p>
+              <h3 className="text-lg font-black text-[#292A25]">{t.modalTitle}</h3>
+              <p className="text-xs text-gray-400">{t.orderNoLabel} <span className="font-bold text-[#B49A70]">{showInvoiceModal.orderNo}</span></p>
             </div>
 
-            <div className="bg-[#FAF3F0] p-4 rounded-2xl space-y-2 text-xs border border-[#E8D0C8]">
+            <div className="bg-[#F1EBDD] p-4 rounded-2xl space-y-2 text-xs border border-[#B49A70]/20">
               <div className="flex justify-between"><span>{t.customerLabel}</span><b>{showInvoiceModal.customerName}</b></div>
               <div className="flex justify-between"><span>{t.phoneModalLabel}</span><b>{showInvoiceModal.phone}</b></div>
               <div className="flex justify-between"><span>{t.eventDateLabel}</span><b>{showInvoiceModal.eventDate}</b></div>
-              <div className="flex justify-between border-t border-[#E8D0C8] pt-2 text-[#8C5345]"><span>{t.deposit30}</span><b>{showInvoiceModal.deposit30.toLocaleString()} LAK</b></div>
+              <div className="flex justify-between border-t border-[#B49A70]/30 pt-2 text-[#292A25]"><span>{t.deposit30}</span><b>{showInvoiceModal.deposit30.toLocaleString()} LAK</b></div>
             </div>
 
             <a
-              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Katoups Service Order: ${showInvoiceModal.orderNo}\nCustomer: ${showInvoiceModal.customerName}\nPhone:${showInvoiceModal.phone}\nDate: ${showInvoiceModal.eventDate}\nTotal:${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
+              href={`https://wa.me/8562051702676?text=${encodeURIComponent(`Mungkkhon Company Order: ${showInvoiceModal.orderNo}\nCustomer: ${showInvoiceModal.customerName}\nPhone:${showInvoiceModal.phone}\nDate: ${showInvoiceModal.eventDate}\nTotal:${showInvoiceModal.totalAmount.toLocaleString()} LAK`)}`}
               target="_blank"
               rel="noreferrer"
               className="w-full block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl shadow hover:opacity-90 transition text-xs"
