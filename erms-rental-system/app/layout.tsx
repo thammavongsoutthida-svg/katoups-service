@@ -4,6 +4,11 @@ import type { Metadata } from 'next';
 export const metadata = {
   title: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
   description: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
+  icons: {
+    icon: '/logo.png', // ຫຼື '/favicon.ico'
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({
