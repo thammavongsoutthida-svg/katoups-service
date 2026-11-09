@@ -11,14 +11,14 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setErrorMsg('');
 
-    // 🔑 ກວດສອບ Passcode (ຮັກສາ logic ເກົ່າໄວ້ 100%)
-    if (password === 'katoups2026' || password === '123456' || password === 'admin') {
+    // 🔑 ກວດສອບ Passcode (ອັບເດດ passcode ສຳລັບ MONGKHON)
+    if (password === 'mongkhon2026' || password === 'katoups2026' || password === '123456' || password === 'admin') {
       
-      // 1. ເພີ່ມ Cookie ສຳລັບ Middleware
-      document.cookie = "katoups_admin_session=authenticated; path=/; max-age=" + (7 * 24 * 60 * 60);
+      // 1. ເພີ່ມ Cookie ສຳລັບ Middleware (ອັບເດດ session key)
+      document.cookie = "mongkhon_admin_session=authenticated; path=/; max-age=" + (7 * 24 * 60 * 60);
 
-      // 2. ເພີ່ມ localStorage Token
-      localStorage.setItem('katoups_admin_token', 'true');
+      // 2. ເພີ່ມ localStorage Token (ອັບເດດ token key)
+      localStorage.setItem('mongkhon_admin_token', 'true');
 
       // 3. ເຂົ້າໄປໜ້າ Admin
       router.push('/admin');
@@ -32,14 +32,14 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-[#F1EBDD] flex items-center justify-center p-4 font-['Noto_Sans_Lao',sans-serif] text-[#292A25]">
       <div className="bg-white rounded-3xl p-8 max-w-md w-full border border-[#B49A70]/30 shadow-xl text-center space-y-6">
         
-        {/* 🖼️ ປັບໂລໂກ້ໃຫ້ສົມສ່ວນ ບໍ່ໃຫ້ຕັດ ແລະ ເດັ່ນງາມ */}
+        {/* 🖼️ ໂລໂກ້ MONGKHON */}
         <div className="w-36 h-24 mx-auto flex items-center justify-center p-1">
-          <img src="/logo.png" alt="Mongkhon Company Sole Co., Ltd" className="w-full h-full object-contain" />
+          <img src="/logo.png" alt="MONGKHON COMPANY CO., LTD" className="w-full h-full object-contain" />
         </div>
 
         <div>
           <h1 className="text-2xl font-black text-[#292A25] tracking-wide">MONGKHON ADMIN LOGIN</h1>
-          <p className="text-xs text-[#B49A70] font-bold mt-1">ລະບົບຫຼັງບ້ານສຳລັບຜູ້ດູແລ ບໍລິສັດ ມຸງຄົນ ຈຳກັດຜູ້ດຽວ</p>
+          <p className="text-xs text-[#B49A70] font-bold mt-1">ລະບົບຫຼັງບ້ານສຳລັບຜູ້ດູແລ ບໍລິສັດ ມຸງຄົນ ຈຳກັດ</p>
         </div>
 
         {errorMsg && (
