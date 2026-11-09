@@ -2,12 +2,12 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata = {
-  title: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
-  description: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
+  title: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລວມ',
+  description: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລວມ',
   icons: {
-    icon: '/Logo.png', // ຫຼື '/Logo.ico'
-    shortcut: '/Logo.png',
-    apple: '/Logo.png',
+    icon: '/Logo.ico?v=2',
+    shortcut: '/Logo.ico?v=2',
+    apple: '/Logo.ico?v=2',
   },
 };
 
