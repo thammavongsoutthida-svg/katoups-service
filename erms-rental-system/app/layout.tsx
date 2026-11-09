@@ -1,9 +1,9 @@
 import './globals.css';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'KATOUPS SERVICE - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
-  description: 'ກະຕູບສ໌ ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
+export const metadata = {
+  title: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
+  description: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
 };
 
 export default function RootLayout({
