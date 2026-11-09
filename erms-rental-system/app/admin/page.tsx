@@ -128,7 +128,7 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    const isAuth = localStorage.getItem('katoups_admin_token');
+    const isAuth = localStorage.getItem('mongkhon_admin_token') || localStorage.getItem('katoups_admin_token');
     if (!isAuth) {
       router.push('/admin/login');
       return;
@@ -383,7 +383,9 @@ export default function AdminDashboardPage() {
   const displayEquity = customEquity !== null ? customEquity : calcEquity;
 
   const handleLogout = () => {
+    document.cookie = "mongkhon_admin_session=; path=/; max-age=0;";
     document.cookie = "katoups_admin_session=; path=/; max-age=0;";
+    localStorage.removeItem('mongkhon_admin_token');
     localStorage.removeItem('katoups_admin_token');
     router.push('/admin/login');
     router.refresh();
@@ -391,12 +393,12 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#F1EBDD] flex font-['Noto_Sans_Lao',sans-serif] text-[#292A25]">
-      {/* 👑 Sidebar Navigation - ປ່ຽນຊື່ເປັນ ບໍລິສັດ ມຸງຄົນ ຈຳກັດ */}
+      {/* 👑 Sidebar Navigation - ບໍລິສັດ ມຸງຄົນ ຈຳກັດ */}
       <aside className="w-64 bg-white border-r border-[#B49A70]/30 p-6 flex flex-col justify-between shadow-sm">
         <div className="space-y-6">
           <div className="text-center space-y-2">
             <div className="w-36 h-20 mx-auto relative overflow-hidden flex items-center justify-center">
-              <img src="/logo.png" alt="Mongkhon Logo" className="w-full h-full object-contain" />
+              <img src="/logo.png" alt="MONGKHON COMPANY CO., LTD" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="font-extrabold text-[#292A25] text-sm tracking-tight">MONGKHON CO., LTD</h1>
@@ -458,7 +460,7 @@ export default function AdminDashboardPage() {
               {activeTab === 'cashScan' && '📸 ໃບສະແກນເງິນສົດ & ໃບບິນ'}
               {activeTab === 'dashboard' && '📈 ພາບລວມລະບົບ (Overview)'}
             </h1>
-            <p className="text-xs text-[#687568] font-bold mt-1">Mongkhon Company Co., Ltd Cloud Database Active</p>
+            <p className="text-xs text-[#687568] font-bold mt-1">MONGKHON COMPANY CO., LTD Cloud Database Active</p>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={fetchOrders} className="bg-white border border-[#B49A70]/30 px-4 py-2 rounded-full text-xs font-bold text-[#292A25] shadow-sm hover:bg-[#F1EBDD]">
