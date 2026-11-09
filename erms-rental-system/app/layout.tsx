@@ -2,14 +2,11 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata = {
-  title: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລວມ',
-  description: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລວມ',
+  title: 'MONGKHON COMPANY CO., LTD',
   icons: {
-    icon: '/Logo.ico?v=2',
-    shortcut: '/Logo.ico?v=2',
-    apple: '/Logo.ico?v=2',
+    icon: '/favicon.ico', // หรือ '/favicon.png'
   },
-};
+}
 
 export default function RootLayout({
   children,
@@ -19,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="lo">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"
