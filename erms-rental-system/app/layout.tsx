@@ -5,9 +5,9 @@ export const metadata = {
   title: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າອຸປະກອນງານລ້ຽງ',
   description: 'MONGKHON COMPANY CO., LTD - ບໍລິການເຊົ່າເຕັ້ນ, ໂຕະ, ຕັ່ງ ແລະ ອຸປະກອນຈັດງານລ້ຽງ',
   icons: {
-    icon: '/logo.png', // ຫຼື '/favicon.ico'
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    icon: '/Logo.png', // ຫຼື '/Logo.ico'
+    shortcut: '/Logo.png',
+    apple: '/Logo.png',
   },
 };
 
