@@ -165,10 +165,19 @@ export default function ClientHomePage() {
     { id: 'g-8', title: lang === 'la' ? 'ດອກໄຟແຊນເດີເລຍ' : 'Luxury Chandelier Lighting', img: '/656565.jpeg' },
   ];
 
+  // 🛒 Smooth Scroll ไปหา Section เลือกอุปกรณ์
+  const scrollToEquipment = () => {
+    const element = document.getElementById('equipment-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // 📄 Smooth Scroll ไปหา Section ฟอมออกใบสะเหนี
   const scrollToQuotation = () => {
     const element = document.getElementById('quotation-form');
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -319,10 +328,12 @@ export default function ClientHomePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button onClick={scrollToQuotation} className="bg-[#687568] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
+          {/* 🛒 ก๊ดแล่ว Scroll ไปหา ตะก้า/รายการอุปะกรอน */}
+          <button onClick={scrollToEquipment} className="bg-[#687568] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>🛒 {t.cart} ({cartTotalItems})</span>
           </button>
 
+          {/* 📄 ก๊ดแล่ว Scroll ไปหา ฟอมใบสะเหนีราคา */}
           <button onClick={scrollToQuotation} className="bg-[#B49A70] text-white px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 transition">
             <span>📄 {t.quotationBtn}</span>
           </button>
@@ -384,7 +395,8 @@ export default function ClientHomePage() {
 
         {/* SECTION ເມນູເລືອກເຊົ່າ & ຟອມ */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-4">
+          {/* 🛒 SECTION เกลือกอุปะกรอน (เพี่ม id="equipment-section" แล้ว) */}
+          <div id="equipment-section" className="lg:col-span-2 space-y-4 scroll-mt-24">
             <div className="border-b border-[#B49A70]/30 pb-2">
               <h3 className="text-lg font-black text-[#292A25]">🎪 {t.selectEquipment}</h3>
               <p className="text-xs text-[#687568] font-bold">{t.selectDesc}</p>
